@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        @font-face { font-family: 'PromptRegular'; src: url('PromptRegular.ttf') format('truetype'); }
+        * { font-family: 'PromptRegular' !important; font-weight: bold !important; }
+        body { background-color: #f0f7ff !important; }
+
+        .main-header { background: #2b5484; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .header-top { padding: 15px 40px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-logo-large { height: 85px; width: auto; margin-right: 25px; }
+        .learning-title { color: #ffffff; font-size: 2.2rem; margin: 0; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .navbar-custom { padding: 5px 30px !important; }
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important; font-size: 1.1rem; padding: 10px 18px !important;
+            margin: 5px; border: 1px solid transparent; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+            color: #ffffff !important; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); transform: translateY(-2px);
+        }
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px;
+            padding: 5px 15px; display: flex; align-items: center; color: white; transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover { background: rgba(255,255,255,0.2); }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+        .dropdown-menu { border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 10px; padding: 8px; overflow: hidden; }
+        .dropdown-item { border-radius: 10px; padding: 10px 15px; font-size: 0.95rem; transition: 0.2s; }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active { background-color: #f0f7ff; color: #2b5484 !important; }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="Index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-calendar-check me-1"></i> Reservation</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="Status.html"><i class="bi bi-info-circle me-1"></i> Status</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Dashboard.html"><i class="bi bi-graph-up me-1"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Contact.html"><i class="bi bi-telephone me-1"></i> Contact</a></li>
+                </ul>
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    body { background-color: #f0f7ff; }
+    .dash-title { color: #2b5484; font-size: 2.2rem; }
+    .stat-card {
+        background: #ffffff; border-radius: 18px; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        padding: 20px 22px; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .stat-card .stat-label { font-size: 1rem; color: #4a5568; }
+    .stat-card .stat-val { font-size: 2.1rem; line-height: 1.1; color: #1a202c; }
+    .stat-card .stat-unit { font-size: .95rem; color: #718096; }
+    .stat-card .stat-sub { font-size: .9rem; color: #4a5568; }
+    .stat-icon { font-size: 2.6rem; color: #4a5568; display: flex; align-items: center; }
+    .stat-card.card-warning { background: #F5B921; }
+    .stat-card.card-warning .stat-label, .stat-card.card-warning .stat-sub, .stat-card.card-warning .stat-icon { color: #1a202c; }
+    .avail-bar { height: 10px; border-radius: 10px; background: #e2e8f0; overflow: hidden; margin-top: 6px; }
+    .avail-bar > span { display: block; height: 100%; background: #3d6b35; border-radius: 10px; }
+    .dot-green { color: #3d6b35; font-size: .8rem; }
+    .panel-card { background: #fff; border-radius: 20px; padding: 22px 25px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); margin-bottom: 25px; }
+    .panel-title { color: #2b5484; font-size: 1.25rem; margin: 0; }
+    .filter-bar .form-control { border-radius: 12px; border: 1px solid #d7e2f0; }
+    .btn-search { background: #2b5484; color: #fff; border-radius: 12px; padding: 8px 28px; border: none; }
+    .btn-search:hover { background: #21426a; color: #fff; }
+    .cat-tabs { background: #fff; border-radius: 14px; padding: 6px; display: inline-flex; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .cat-tabs button { border: none; background: transparent; padding: 10px 26px; border-radius: 10px; color: #2b5484; }
+    .cat-tabs button.active { background: #2b5484; color: #fff; }
+    .cat-tabs button[data-cat="book"].active      { background: #F4BC13; color: #fff; }
+    .cat-tabs button[data-cat="boardgame"].active { background: #3B6540; color: #fff; }
+    .cat-tabs button[data-cat="room"].active      { background: #0D6EFD; color: #fff; }
+    .top-item { padding: 12px 0; border-bottom: 1px dashed #e2e8f0; }
+    .top-item:last-child { border-bottom: none; }
+    .top-name { color: #1a202c; font-size: 1.05rem; }
+    .top-meta { color: #718096; font-size: .88rem; }
+    .top-rank { color: #2b5484; }
+    .top-list[data-list="book"]      .top-rank, .top-list[data-list="book"]      .top-name { color: #F4BC13; }
+    .top-list[data-list="boardgame"] .top-rank, .top-list[data-list="boardgame"] .top-name { color: #3B6540; }
+    .top-list[data-list="room"]      .top-rank, .top-list[data-list="room"]      .top-name { color: #0D6EFD; }
+</style>
+
+<div class="container py-4">
+    <h2 class="dash-title mb-4">Dashboard</h2>
+
+    <!-- ============ ข้อ 1 : การ์ดสรุป ============ -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="flex-grow-1">
+                    <div class="stat-label">หนังสือทั้งหมด</div>
+                    <div class="stat-val" id="statTotalBook">- <span class="stat-unit">เล่ม</span></div>
+                    <div class="stat-sub mt-1"><i class="bi bi-circle-fill dot-green me-1"></i>พร้อมใช้งาน <span id="statPctBook">-</span> %</div>
+                    <div class="avail-bar"><span id="statAvailBar" style="width: 0%"></span></div>
+                </div>
+                <div class="stat-icon"><i class="bi bi-book-fill"></i></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="flex-grow-1">
+                    <div class="stat-label">บอร์ดเกม</div>
+                    <div class="stat-val" id="statTotalBG">- <span class="stat-unit">เกม</span></div>
+                    <div class="stat-sub mt-1"><i class="bi bi-person-fill me-1"></i>กำลังถูกใช้งาน <span id="statBusyBG">-</span> เกม</div>
+                </div>
+                <div class="stat-icon"><i class="bi bi-dice-5-fill"></i></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="flex-grow-1">
+                    <div class="stat-label">ห้องประชุม</div>
+                    <div class="stat-val" id="statTotalRoom">- <span class="stat-unit">ห้อง</span></div>
+                    <div class="stat-sub mt-1">จองแล้ว <span id="statBusyRoom">-</span> ห้อง</div>
+                </div>
+                <div class="stat-icon"><i class="bi bi-door-open-fill"></i></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card card-warning">
+                <div class="flex-grow-1">
+                    <div class="stat-label">เลยกำหนด</div>
+                    <div class="stat-sub mt-2"><i class="bi bi-book-fill me-2"></i><span id="statOverdueBook">-</span> เล่ม</div>
+                    <div class="stat-sub mt-1"><i class="bi bi-dice-5-fill me-2"></i><span id="statOverdueBG">-</span> เกม</div>
+                    <div class="stat-sub mt-1"><i class="bi bi-door-open-fill me-2"></i><span id="statOverdueRoom">-</span> ห้อง</div>
+                </div>
+                <div class="stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ ข้อ 2 : การ์ดเลือกช่วงวันที่ ============ -->
+    <div class="panel-card filter-bar">
+        <form class="row g-3 align-items-end" id="rangeForm">
+            <div class="col-md-4">
+                <label class="mb-1" style="font-size:.9rem;color:#4a5568;">วันที่เริ่มต้น</label>
+                <input type="date" id="startDate" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="mb-1" style="font-size:.9rem;color:#4a5568;">วันที่สิ้นสุด</label>
+                <input type="date" id="endDate" class="form-control">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn-search flex-grow-1">เรียกดูข้อมูล</button>
+                <a href="Dashboard.html" class="btn btn-outline-secondary d-none" id="clearRangeBtn" style="border-radius:12px;">ล้างค่า</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- ============ ข้อ 3 : กราฟเส้นสถิติการใช้งาน ============ -->
+    <div class="panel-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <h5 class="panel-title" id="usageChartTitle">สถิติการใช้งานรายเดือน</h5>
+            <span style="font-size:.9rem;color:#718096;" id="usageChartRangeLabel"></span>
+        </div>
+        <div style="height: 420px;"><canvas id="usageChart"></canvas></div>
+    </div>
+
+    <div class="row g-4">
+        <!-- ============ ข้อ 4 : รายการยอดนิยม ============ -->
+        <div class="col-lg-6">
+            <h5 class="panel-title mb-3">รายการยอดนิยม 5 อันดับแรก</h5>
+            <div class="cat-tabs mb-3">
+                <button type="button" class="active" data-cat="book">Book</button>
+                <button type="button" data-cat="boardgame">Boardgame</button>
+                <button type="button" data-cat="room">Room</button>
+            </div>
+            <div class="panel-card" id="topPanel">
+                <div class="top-list" data-list="book"><div class="text-muted text-center py-4">กำลังโหลด...</div></div>
+                <div class="top-list d-none" data-list="boardgame"></div>
+                <div class="top-list d-none" data-list="room"></div>
+            </div>
+        </div>
+
+        <!-- ============ ข้อ 5 : กราฟแท่งรายชั่วโมง ============ -->
+        <div class="col-lg-6">
+            <div class="panel-card h-100">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <h5 class="panel-title">สถิติการใช้งานรายชั่วโมง</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-calendar-event" style="color:#2b5484;"></i>
+                        <input type="date" id="hourDateInput" class="form-control form-control-sm" style="border-radius:10px;width:165px;">
+                    </div>
+                </div>
+                <div style="height: 300px;"><canvas id="hourChart"></canvas></div>
+                <div class="mt-3" style="color:#2d3748;">
+                    <div id="hourDayLabel">วันที่ -</div>
+                    <div class="mt-1" id="hourPeakLabel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="bg-warning bg-opacity-10 p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-chat-heart fs-1 text-warning"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center"><i class="bi bi-emoji-frown fs-1"></i><span class="d-block small mt-1">ปรับปรุง</span></div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center"><i class="bi bi-emoji-neutral fs-1"></i><span class="d-block small mt-1">ปานกลาง</span></div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center"><i class="bi bi-emoji-laughing fs-1"></i><span class="d-block small mt-1">ดีเยี่ยม</span></div>
+                        </label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm" style="border-radius: 12px;">ส่งความคิดเห็น <i class="bi bi-send ms-2"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .floating-feedback-btn { position: fixed; bottom: 30px; right: 30px; z-index: 9999; padding: 12px 25px; border-radius: 50px; border: 2px solid #fff; transition: all 0.3s ease; display: flex; align-items: center; }
+    .floating-feedback-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important; }
+    .rating-option { cursor: pointer; }
+    .rating-box { color: #ccc; transition: all 0.2s; }
+    .rating-box:hover { color: #666; transform: scale(1.1); }
+    .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+    .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+    .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+    .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #ffc107; }
+    .main-footer { background: #2b5484; color: white; padding: 25px 0; border-top: 3px solid rgba(255,255,255,0.1); width: 100%; }
+    .footer-contact-pill { background: rgba(255,255,255,0.15); padding: 10px 25px; border-radius: 50px; display: inline-block; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.2); }
+    body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+    main, .container { flex: 1; }
+</style>
+
+<footer class="main-footer">
+    <div class="container text-center">
+        <div class="footer-contact-pill">📞 ติดต่อ โทร 012-345 6789</div>
+        <div class="mt-2 opacity-50 small">&copy; 2026 Learning Commons. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://wzjbaxnrppvfrnncttne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const thMonths = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const thMonthFull = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+// ---------- ตัวช่วยวันที่ (ฐานข้อมูลเก็บ d-m-Y ทั้งหมด) ----------
+function toDMY(d) { return String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear(); }
+function parseDMY(s) {
+    if (!s) return null;
+    const parts = s.split('-');
+    if (parts.length !== 3) return null;
+    const [d, m, y] = parts.map(Number);
+    if (!d || !m || !y) return null;
+    return new Date(y, m - 1, d);
+}
+function dateKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function monthKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
+
+const today = new Date();
+const yesterday = new Date(today.getTime() - 86400000);
+const thisYear = today.getFullYear();
+
+// ---------- state จาก URL ----------
+function getState() {
+    const p = new URLSearchParams(window.location.search);
+    return { start: p.get('start') || '', end: p.get('end') || '', hourDate: p.get('hour_date') || '' };
+}
+let { start: startISO, end: endISO, hourDate: hourDateISO } = getState();
+const todayISO = today.toISOString().split('T')[0];
+if (startISO && startISO > todayISO) startISO = todayISO;
+if (endISO && endISO > todayISO) endISO = todayISO;
+if (startISO && endISO && startISO > endISO) { const t = startISO; startISO = endISO; endISO = t; }
+const hasRange = !!(startISO && endISO);
+
+document.getElementById('startDate').max = todayISO;
+document.getElementById('endDate').max = todayISO;
+document.getElementById('startDate').value = startISO;
+document.getElementById('endDate').value = endISO;
+document.getElementById('clearRangeBtn').classList.toggle('d-none', !hasRange);
+document.getElementById('startDate').addEventListener('change', function () { document.getElementById('endDate').min = this.value; });
+
+document.getElementById('rangeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const s = document.getElementById('startDate').value, en = document.getElementById('endDate').value;
+    const p = new URLSearchParams();
+    if (s) p.set('start', s);
+    if (en) p.set('end', en);
+    if (hourDateISO) p.set('hour_date', hourDateISO);
+    window.location.href = 'Dashboard.html' + (p.toString() ? '?' + p.toString() : '');
+});
+
+const rangeStart = hasRange ? new Date(startISO) : new Date(thisYear, 0, 1);
+const rangeEnd = hasRange ? new Date(endISO) : new Date(thisYear, 11, 31);
+const popStart = rangeStart;
+const popEnd = hasRange ? rangeEnd : today;
+
+document.getElementById('usageChartRangeLabel').textContent = hasRange ? `ช่วงวันที่ ${startISO} ถึง ${endISO}` : `ข้อมูลปี ${thisYear}`;
+
+// ---------------------------------------------------------
+// โหลดข้อมูลทั้งหมดครั้งเดียว แล้วประมวลผลฝั่ง client
+// ---------------------------------------------------------
+async function loadAll() {
+    const [{ count: totalBook }, { count: totalBG }, { count: totalRoom }, { data: bookings }] = await Promise.all([
+        supabase.from('book').select('*', { count: 'exact', head: true }),
+        supabase.from('boardgame').select('*', { count: 'exact', head: true }),
+        supabase.from('room').select('*', { count: 'exact', head: true }),
+        supabase.from('booking').select('*'),
+    ]);
+
+    const rows = (bookings || []).map(b => {
+        const id = String(b.BookID || '');
+        let cat = null;
+        if (id.startsWith('BG')) cat = 'boardgame';
+        else if (id.startsWith('B')) cat = 'book';
+        else if (id.startsWith('R')) cat = 'room';
+        return { ...b, cat, bookingDateObj: parseDMY(b.BookingDate), dueDateObj: parseDMY(b.DueDate) };
+    });
+    // เช็คสถานะ "กำลังถูกใช้งาน" ด้วยค่าเดียวกับหน้าจองจริง (Book/Room/Status ใช้ 'กำลังใช้งาน', Boardgame ใช้ 'กำลังเล่น')
+    // ไม่ใช้ "อะไรก็ได้ที่ไม่ใช่คืนแล้ว" เพราะจะไปนับแถวสถานะแปลกๆ ที่ค้างอยู่ผิดๆ ด้วย
+    const activeBook = rows.filter(r => r.cat === 'book' && r.Status === 'กำลังใช้งาน');
+    const activeBG = rows.filter(r => r.cat === 'boardgame' && r.Status === 'กำลังเล่น');
+    const activeRoom = rows.filter(r => r.cat === 'room' && r.Status === 'กำลังใช้งาน');
+
+    const busyBook = new Set(activeBook.map(r => r.BookID)).size;
+    const busyBG = new Set(activeBG.map(r => r.BookID)).size;
+    const busyRoom = new Set(activeRoom.map(r => r.BookID)).size;
+    const availBook = Math.max((totalBook || 0) - busyBook, 0);
+    const pctBook = totalBook > 0 ? Math.round((availBook / totalBook) * 100) : 0;
+
+    document.getElementById('statTotalBook').innerHTML = (totalBook || 0).toLocaleString() + ' <span class="stat-unit">เล่ม</span>';
+    document.getElementById('statPctBook').textContent = pctBook;
+    document.getElementById('statAvailBar').style.width = pctBook + '%';
+    document.getElementById('statTotalBG').innerHTML = (totalBG || 0).toLocaleString() + ' <span class="stat-unit">เกม</span>';
+    document.getElementById('statBusyBG').textContent = busyBG;
+    document.getElementById('statTotalRoom').innerHTML = (totalRoom || 0).toLocaleString() + ' <span class="stat-unit">ห้อง</span>';
+    document.getElementById('statBusyRoom').textContent = busyRoom;
+
+    // หนังสือ: เลยกำหนดถ้า DueDate < วันนี้ (มีแค่หนังสือที่บันทึก DueDate)
+    const overdueBook = activeBook.filter(r => r.dueDateObj && r.dueDateObj < today).length;
+    // บอร์ดเกม/ห้องประชุม: ไม่มี DueDate ต้องเทียบ "วันที่จอง + เวลาสิ้นสุด" กับเวลาปัจจุบันแทน (ตรงกับหน้า Status.html)
+    function isTimeOverdue(r) {
+        if (!r.bookingDateObj || !r.EndTime) return false;
+        const [eh, em] = String(r.EndTime).split(':').map(Number);
+        const end = new Date(r.bookingDateObj);
+        end.setHours(eh, em, 0, 0);
+        return end < new Date();
+    }
+    const overdueBG = activeBG.filter(isTimeOverdue).length;
+    const overdueRoom = activeRoom.filter(isTimeOverdue).length;
+    document.getElementById('statOverdueBook').textContent = overdueBook;
+    document.getElementById('statOverdueBG').textContent = overdueBG;
+    document.getElementById('statOverdueRoom').textContent = overdueRoom;
+
+    // ---------- ข้อ 3: กราฟเส้น ----------
+    const daySpan = Math.floor((rangeEnd - rangeStart) / 86400000) + 1;
+    const groupBy = (hasRange && daySpan <= 62) ? 'day' : 'month';
+    document.getElementById('usageChartTitle').textContent = 'สถิติการใช้งาน' + (groupBy === 'day' ? 'รายวัน' : 'รายเดือน');
+
+    const labels = [], keys = [];
+    if (groupBy === 'day') {
+        for (let t = new Date(rangeStart); t <= rangeEnd; t.setDate(t.getDate() + 1)) {
+            keys.push(dateKey(t));
+            labels.push(t.getDate() + ' ' + thMonths[t.getMonth()]);
+        }
+    } else {
+        let cy = rangeStart.getFullYear(), cm = rangeStart.getMonth();
+        const eY = rangeEnd.getFullYear(), eM = rangeEnd.getMonth();
+        while (cy < eY || (cy === eY && cm <= eM)) {
+            keys.push(cy + '-' + String(cm + 1).padStart(2, '0'));
+            labels.push(thMonths[cm] + (rangeStart.getFullYear() !== rangeEnd.getFullYear() ? ' ' + cy : ''));
+            cm++; if (cm > 11) { cm = 0; cy++; }
+        }
+    }
+
+    function seriesFor(cat) {
+        const bucket = {}; keys.forEach(k => bucket[k] = 0);
+        rows.forEach(r => {
+            if (r.cat !== cat || !r.bookingDateObj) return;
+            if (r.bookingDateObj < rangeStart || r.bookingDateObj > rangeEnd) return;
+            const k = (groupBy === 'day') ? dateKey(r.bookingDateObj) : monthKey(r.bookingDateObj);
+            if (k in bucket) bucket[k]++;
+        });
+        return keys.map(k => bucket[k]);
+    }
+    const lineRoom = seriesFor('room'), lineBG = seriesFor('boardgame'), lineBook = seriesFor('book');
+
+    new Chart(document.getElementById('usageChart'), {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                { label: 'ห้องประชุม', data: lineRoom, borderColor: '#2F6FDB', backgroundColor: '#2F6FDB', pointRadius: 5, pointHoverRadius: 8, tension: 0.15, borderWidth: 3 },
+                { label: 'บอร์ดเกม', data: lineBG, borderColor: '#3C6E3C', backgroundColor: '#3C6E3C', pointRadius: 5, pointHoverRadius: 8, tension: 0.15, borderWidth: 3 },
+                { label: 'หนังสือ', data: lineBook, borderColor: '#F2B705', backgroundColor: '#F2B705', pointRadius: 5, pointHoverRadius: 8, tension: 0.15, borderWidth: 3 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'point', intersect: true },
+            plugins: {
+                legend: { position: 'top', align: 'center', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 10, boxHeight: 10, padding: 28, font: { size: 14 } } },
+                tooltip: { displayColors: true, callbacks: { title: (items) => items[0].label, label: (item) => ' ' + item.dataset.label + ' : ' + item.parsed.y + ' ครั้ง' } }
+            },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+
+    // ---------- ข้อ 4: รายการยอดนิยม 5 อันดับแรก ----------
+    async function topList(cat, table, idField) {
+        const counts = {};
+        rows.forEach(r => {
+            if (r.cat !== cat || !r.bookingDateObj) return;
+            if (r.bookingDateObj < popStart || r.bookingDateObj > popEnd) return;
+            counts[r.BookID] = (counts[r.BookID] || 0) + 1;
+        });
+        const ids = Object.keys(counts);
+        if (ids.length === 0) return [];
+        const { data: items } = await supabase.from(table).select('*').in(idField, ids);
+        return (items || [])
+            .map(it => ({ ...it, c: counts[it[idField]] || 0 }))
+            .sort((a, b) => b.c - a.c || String(a.Name).localeCompare(String(b.Name)))
+            .slice(0, 5);
+    }
+    const [topBooks, topGames, topRooms] = await Promise.all([
+        topList('book', 'book', 'BookID'),
+        topList('boardgame', 'boardgame', 'BoardgameID'),
+        topList('room', 'room', 'RoomID'),
+    ]);
+
+    function renderTop(list, kind) {
+        if (list.length === 0) return '<div class="text-muted text-center py-4">ไม่พบข้อมูล</div>';
+        return list.map((item, i) => {
+            if (kind === 'book') {
+                return `<div class="top-item"><div class="top-name"><span class="top-rank me-2">${i + 1}.</span>${item.Name}</div>
+                        <div class="top-meta ms-4">${item.Author || ''} <span class="ms-3">ปีที่พิมพ์ ${item.PublishYear || ''}</span></div></div>`;
+            }
+            return `<div class="top-item"><div class="top-name"><span class="top-rank me-2">${i + 1}.</span>${item.Name}</div></div>`;
+        }).join('');
+    }
+    document.querySelector('.top-list[data-list="book"]').innerHTML = renderTop(topBooks, 'book');
+    document.querySelector('.top-list[data-list="boardgame"]').innerHTML = renderTop(topGames, 'other');
+    document.querySelector('.top-list[data-list="room"]').innerHTML = renderTop(topRooms, 'other');
+
+    document.querySelectorAll('.cat-tabs button').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.cat-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const cat = this.dataset.cat;
+            document.querySelectorAll('#topPanel .top-list').forEach(el => el.classList.toggle('d-none', el.dataset.list !== cat));
+        });
+    });
+
+    // ---------- ข้อ 5: กราฟแท่งรายชั่วโมง (ไม่อิงตัวกรองข้อ 2) ----------
+    let hourDay = hourDateISO && hourDateISO <= todayISO ? new Date(hourDateISO) : yesterday;
+    document.getElementById('hourDateInput').max = todayISO;
+    document.getElementById('hourDateInput').value = hourDay.toISOString().split('T')[0];
+    document.getElementById('hourDateInput').addEventListener('change', function () {
+        const p = new URLSearchParams(window.location.search);
+        p.set('hour_date', this.value);
+        window.location.href = 'Dashboard.html' + '?' + p.toString();
+    });
+
+    const hourDayDMY = toDMY(hourDay);
+    const hourStart = 8, hourEnd = 20;
+    const hourLabels = [], hourCounts = [];
+    for (let h = hourStart; h <= hourEnd; h++) { hourLabels.push(String(h).padStart(2, '0') + '.00'); hourCounts.push(0); }
+
+    rows.filter(r => (r.cat === 'boardgame' || r.cat === 'room') && r.BookingDate === hourDayDMY && r.StartTime).forEach(r => {
+        const sh = parseInt(String(r.StartTime).slice(0, 2), 10);
+        let eh = r.EndTime ? parseInt(String(r.EndTime).slice(0, 2), 10) : sh + 1;
+        if (eh <= sh) eh = sh + 1;
+        for (let h = hourStart; h <= hourEnd; h++) { if (h >= sh && h < eh) hourCounts[h - hourStart]++; }
+    });
+
+    const maxHour = Math.max(...hourCounts);
+    const peakList = [];
+    if (maxHour > 0) { hourCounts.forEach((c, i) => { if (c === maxHour) peakList.push(`${String(hourStart + i).padStart(2, '0')}.00น.-${String(hourStart + i + 1).padStart(2, '0')}.00น.`); }); }
+    const hourColors = hourCounts.map(c => { const alpha = maxHour > 0 ? (0.15 + 0.85 * (c / maxHour)) : 0.15; return `rgba(43, 83, 132, ${alpha.toFixed(2)})`; });
+
+    document.getElementById('hourDayLabel').textContent = `วันที่ ${hourDay.getDate()} ${thMonthFull[hourDay.getMonth()]} ${hourDay.getFullYear()}`;
+    document.getElementById('hourPeakLabel').textContent = maxHour > 0
+        ? `ช่วงเวลาที่มีผู้ใช้หนาแน่นที่สุดคือ ${peakList.join(' และเวลา ')}`
+        : 'ไม่พบข้อมูลการใช้งานในวันที่เลือก';
+
+    new Chart(document.getElementById('hourChart'), {
+        type: 'bar',
+        data: { labels: hourLabels, datasets: [{ label: 'การใช้งาน', data: hourCounts, backgroundColor: hourColors, borderRadius: 4, borderSkipped: false }] },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (item) => ' ใช้งาน ' + item.parsed.y + ' รายการ' } } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } }
+        }
+    });
+}
+
+// Floating feedback button ลอยเหนือ footer
+window.addEventListener('scroll', function () {
+    const btn = document.querySelector('.floating-feedback-btn');
+    const footer = document.querySelector('.main-footer');
+    if (!footer || !btn) return;
+    const scrollPos = window.innerHeight + window.scrollY;
+    const footerTop = footer.offsetTop;
+    if (scrollPos >= footerTop) { btn.style.position = 'absolute'; btn.style.top = (footerTop - btn.offsetHeight - 30) + 'px'; btn.style.bottom = 'auto'; }
+    else { btn.style.position = 'fixed'; btn.style.top = ''; btn.style.bottom = '30px'; }
+});
+
+loadAll();
+</script>
+</body>
+</html>

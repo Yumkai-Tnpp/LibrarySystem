@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* 1. ฟอนต์ Prompt ตัวหนาทั้งเว็บ */
+        @font-face {
+            font-family: 'PromptRegular';
+            src: url('PromptRegular.ttf') format('truetype');
+        }
+        * {
+            font-family: 'PromptRegular' !important;
+            font-weight: bold !important;
+        }
+        body { background-color: #f0f7ff !important; }
+
+        /* 2. การตกแต่ง Header & Navbar */
+        .main-header {
+            background: #2b5484;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        /* บรรทัดบน: Logo + Title */
+        .header-top {
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-logo-large {
+            height: 85px;
+            width: auto;
+            margin-right: 25px;
+        }
+        .learning-title {
+            color: #ffffff;
+            font-size: 2.2rem;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* บรรทัดล่าง: Menu + Admin */
+        .navbar-custom {
+            padding: 5px 30px !important;
+        }
+
+        /* เมนูฝั่งซ้าย */
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 1.1rem;
+            padding: 10px 18px !important;
+            margin: 5px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover & Active State: กรอบจะค้างเมื่ออยู่หน้านั้นๆ */
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #ffffff !important;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* เมนู Admin ฝั่งขวา */
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+
+        /* Dropdown Menu Style */
+        .dropdown-menu {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            padding: 8px;
+            overflow: hidden;
+        }
+        .dropdown-item {
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active {
+            background-color: #f0f7ff;
+            color: #2b5484 !important;
+        }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+
+        /* สไตล์การค้นหาและปุ่มเหมือน Book.php */
+        .search-wrapper { max-width: 700px; margin: 40px auto; }
+        .search-group { display: flex; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .search-input { border: none; flex: 1; padding: 10px 25px; border-radius: 50px; outline: none; font-size: 1rem; }
+        .search-btn { background: #198754; color: white; border: none; padding: 10px 30px; border-radius: 50px; transition: 0.3s; font-weight: bold; }
+        .search-btn:hover { background: #146c43; }
+
+        /* Grid และ Card การแสดงผล */
+        .game-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; width: 95%; margin: auto; padding-bottom: 80px; }
+        .game-card { background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 15px; text-align: center; transition: 0.3s; border: none; position: relative; }
+
+        /* เมนู 3 จุด บนการ์ดบอร์ดเกม (สไตล์เดียวกับ Book.php) */
+        .cat-options-btn {
+            position: absolute; top: 8px; right: 8px; z-index: 5;
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.9);
+        }
+        .game-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+        .game-card img { width: 100%; height: 160px; object-fit: contain; border-radius: 15px; padding: 5px; margin-bottom: 10px; }
+
+        .player-info { color: #198754; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px; }
+        .player-info i { margin-right: 4px; }
+
+        /* การ์ดเพิ่มเกมสไตล์ Dashed เหมือน Book.php */
+        .card-add-dashed { border: 2px dashed #cbd5e0 !important; background: #f8f9fa; cursor: pointer; min-height: 310px; border-radius: 20px; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #718096; }
+        .card-add-dashed:hover { border-color: #198754 !important; background: #f4fff8; transform: translateY(-5px); color: #198754; }
+        .card-add-dashed i { font-size: 3.5rem; margin-bottom: 10px; }
+
+        /* Modal สไตล์ Alert-Success เหมือน Book.php */
+        .booking-modal-content { background-color: #fffef2 !important; border-radius: 20px !important; border: none !important; }
+        .booking-alert { background-color: #e0f7fa !important; color: #006064 !important; border: none !important; border-radius: 12px !important; }
+
+        @media (max-width: 1200px) { .game-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 992px) { .game-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .game-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* สไตล์ปุ่มลอย (Floating Feedback Button) - สีเหลือง Warning */
+        .floating-feedback-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 2px solid #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+        .floating-feedback-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+        }
+
+        /* ปุ่มส่งใน Modal - เทา-ดำ */
+        .submit-btn-custom {
+            background-color: #343a40 !important;
+            border: none;
+            color: #fff !important;
+        }
+        .submit-btn-custom:hover {
+            background-color: #23272b !important;
+        }
+
+        /* สไตล์ไอคอนหัวใจ (ตัวโลโก้มีสี แต่ไม่มีพื้นหลัง) */
+        .feedback-heart-icon {
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .feedback-teal-text {
+            color: #17a2b8 !important;
+        }
+
+        /* สไตล์ Rating & Modal */
+        .rating-option { cursor: pointer; }
+        .rating-box { color: #ccc; transition: all 0.2s; }
+
+        .rating-red .btn-check:checked + .rating-box { color: #dc3545 !important; transform: scale(1.2); }
+        .rating-yellow .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+        .rating-green .btn-check:checked + .rating-box { color: #198754 !important; transform: scale(1.2); }
+
+        .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+        .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+        .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #17a2b8; }
+
+        /* สไตล์ของ Footer */
+        .main-footer {
+            background: #2b5484;
+            color: white;
+            padding: 25px 0;
+            border-top: 3px solid rgba(255,255,255,0.1);
+            width: 100%;
+            margin-top: auto;
+        }
+        .footer-contact-pill {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .accordion { margin-bottom: 0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Index.html">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calendar-check me-1"></i> Reservation
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item active" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Status.html">
+                            <i class="bi bi-info-circle me-1"></i> Status
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Dashboard.html">
+                            <i class="bi bi-graph-up me-1"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Contact.html">
+                            <i class="bi bi-telephone me-1"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
+                             alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Popup Alert (replaces old browser alert() pop-ups) -->
+<div class="modal fade" id="popupAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" id="popupAlertClose" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-3 px-4">
+                <div class="mb-2"><i id="popupAlertIcon" class="bi bi-info-circle-fill fs-1"></i></div>
+                <p id="popupAlertMessage" class="mb-0 fs-5 fw-bold text-dark"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4 pt-0">
+                <button type="button" class="btn px-4" id="popupAlertOk" data-bs-dismiss="modal" style="border-radius: 50px; font-weight: bold; border:none;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showPopupAlert(message, redirect, color) {
+    var msgEl = document.getElementById('popupAlertMessage');
+    if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
+    var success = !!color;
+    var tone = success ? '#3B6540' : '#AB1C1C';
+    var iconEl = document.getElementById('popupAlertIcon');
+    if (iconEl) { iconEl.className = success ? 'bi bi-check-circle-fill fs-1' : 'bi bi-exclamation-circle-fill fs-1'; iconEl.style.color = tone; }
+    var okBtn = document.getElementById('popupAlertOk');
+    if (okBtn) { okBtn.style.backgroundColor = tone; okBtn.style.color = '#fff'; }
+    var modalEl = document.getElementById('popupAlertModal');
+    var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.addEventListener('hidden.bs.modal', function onHide() {
+        modalEl.removeEventListener('hidden.bs.modal', onHide);
+        if (redirect === 'back') { window.history.back(); }
+        else if (redirect === 'reload') { window.location.reload(); }
+        else if (redirect) { window.location.href = redirect; }
+    });
+    modalInstance.show();
+}
+</script>
+
+<div class="container py-5">
+    <h2 class="text-center mb-5 fw-bold"><i class="bi bi-dice-5 me-2 text-primary"></i> Boardgame Reservation</h2>
+
+    <div class="search-wrapper">
+        <div class="search-group">
+            <input type="text" id="liveSearch" class="search-input" placeholder="Search for boardgame or category...">
+            <button class="search-btn"><i class="bi bi-search me-2"></i>Search</button>
+        </div>
+        <div id="searchCount" class="text-center mt-2 small text-muted"></div>
+    </div>
+
+    <div class="game-grid" id="gameGrid">
+        <div class="game-item">
+            <div class="card h-100 card-add-dashed" onclick="openAddGameModal()">
+                <i class="bi bi-plus-circle"></i>
+                <div class="fw-bold">Add New Boardgame</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="bookingModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Confirm Game Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="bookingForm">
+          <div class="modal-body">
+            <input type="hidden" id="modalGameID">
+
+            <div id="modalGameName" class="alert booking-alert py-2 fw-bold" style="border-radius: 12px;"></div>
+
+            <div id="playerSuggest" class="small text-muted mb-3 ps-2"></div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="bookMemberID" class="form-control" placeholder="Input MemberID..." required style="border-radius: 12px;">
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label class="small fw-bold">Start Time</label>
+                    <input type="time" id="StartTime" class="form-control" min="08:00" max="19:59" required onchange="calcEndTime()" style="border-radius: 12px;">
+                </div>
+                <div class="col-6">
+                    <label class="small fw-bold">End Time (2 hours limit)</label>
+                    <input type="time" id="EndTime" class="form-control" readonly style="border-radius: 12px; background-color: #f8f9fa;">
+                </div>
+            </div>
+
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" id="acceptTerms">
+                <label class="form-check-label small" for="acceptTerms">
+                    I agree to inspect the equipment before playing and will be responsible for any damages.
+                </label>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 50px;">Cancel</button>
+            <button type="submit" class="btn btn-success px-4" id="btnConfirmBooking" disabled style="border-radius: 50px; font-weight: bold;">Comfirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addGameModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px; border: none;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-primary">Add new Boardgame</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="addGameForm">
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="small fw-bold">BoardgameID (Auto)</label>
+                <input type="text" id="nextBGIDInput" class="form-control bg-light" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Name</label>
+                <input type="text" id="addGameName" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Player</label>
+                <input type="text" id="addGamePlayer" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Category</label>
+                <select id="catSelection" class="form-select" onchange="checkNewCat()" required style="border-radius: 12px;">
+                    <option value="" disabled selected>-- Choose Category --</option>
+                    <option value="NEW" class="text-primary fw-bold">+ Add new category</option>
+                </select>
+            </div>
+            <div id="newCatDiv" class="mb-3 d-none">
+                <input type="text" id="newCatInp" class="form-control border-primary" placeholder="Input new category..." style="border-radius: 12px;">
+            </div>
+            <div class="mb-2">
+                <label class="small fw-bold">Boardgae Image</label>
+                <input type="file" id="addGameImage" class="form-control" accept="image/*" required style="border-radius: 12px;" onchange="previewGameImage(this, 'addGameImagePreviewBox')">
+            </div>
+            <div id="addGameImagePreviewBox" class="d-none" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:12px; margin-top:10px;">
+                <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:10px;">
+            </div>
+        </div>
+        <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editGameModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px; border: none;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-primary">Edit Boardgame</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="editGameForm">
+        <div class="modal-body">
+            <input type="hidden" id="editGameID">
+            <input type="hidden" id="editGameOldName">
+            <div class="mb-3">
+                <label class="small fw-bold">Name</label>
+                <input type="text" id="editGameName" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-2">
+                <label class="small fw-bold">Boardgame Image (leave empty to keep current)</label>
+                <input type="file" id="editGameImage" class="form-control" accept="image/*" style="border-radius: 12px;" onchange="previewGameImage(this, 'editGameImagePreviewBox')">
+            </div>
+            <div id="editGameImagePreviewBox" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:12px; margin-top:10px;">
+                <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:10px;">
+            </div>
+        </div>
+        <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger">Comfirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center text-muted">
+                Are you sure you want to delete this? This action cannot be undone.
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-danger px-4" id="btnConfirmDeleteOk" style="border-radius: 50px;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="feedback-heart-icon mb-3">
+                    <i class="bi bi-chat-heart fs-1 feedback-teal-text"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option rating-red">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-frown fs-1"></i>
+                                <span class="d-block small mt-1">ปรับปรุง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-yellow">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-neutral fs-1"></i>
+                                <span class="d-block small mt-1">ปานกลาง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-green">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-laughing fs-1"></i>
+                                <span class="d-block small mt-1">ดีเยี่ยม</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold shadow-sm submit-btn-custom" style="border-radius: 12px;">
+                        ส่งความคิดเห็น <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer py-6" style="background: #2b5484; border-top: 1px solid #dee2e6;">
+    <div class="container">
+        <div class="row g-4 align-items-center text-center text-md-start">
+            <div class="col-md-4">
+                <h5 class="col-12">Learning Commons</h5>
+                <p class="small opacity-75 " style="font-size: 0.75rem;">&copy; 2026 All Rights Reserved.</p>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <div class="d-inline-block px-3 py-2 bg-white shadow-sm rounded-pill border">
+                    <b class="text-black">🕒 เปิดบริการ : 08.00 - 20.00 น.</b>
+                </div>
+            </div>
+
+            <div class="col-md-4 text-md-end text-center">
+                <div class="mb-1">
+                    <i class="bi bi-telephone-fill me-1 text-white"></i>
+                    <b>โทร :</b> 012-345 6789
+                </div>
+                <div class="small">
+                    <i class="bi bi-envelope-fill me-1 text-white"></i>
+                    <b>Email :</b> Contact@learningcommons.com
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-center opacity-75" style="font-size: 0.90rem;">
+                ห้องสมุดยุคใหม่ เพื่อการเรียนรู้ที่ไร้ขีดจำกัด
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// ---------------------------------------------------------
+// ตั้งค่า Supabase (ต้องตรงกับโปรเจกต์ของคุณ)
+// ---------------------------------------------------------
+const SUPABASE_URL = 'https://wzjbaxnrppvfrnncttne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
+const STORAGE_BUCKET = 'boardgame-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.supabase = supabase;
+
+const NO_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
+let boardgames = [];   // แคชข้อมูลบอร์ดเกมทั้งหมด
+let busyIds = new Set(); // BoardgameID ที่กำลังถูกเล่นอยู่
+let pendingDeleteId = null, pendingDeleteName = null;
+let imageFileMap = {}; // ชื่อเกม (ไม่มีนามสกุล) -> ชื่อไฟล์เต็มในถัง Storage
+
+// โหลดรายชื่อไฟล์ทั้งหมดในถัง แล้วจับคู่กับชื่อเกม (เทียบเท่า findGameImage() ของ PHP เดิม)
+async function refreshImageFileMap() {
+    const { data, error } = await supabase.storage.from(STORAGE_BUCKET).list('', { limit: 1000 });
+    imageFileMap = {};
+    if (error || !data) return;
+    data.forEach(f => {
+        const dot = f.name.lastIndexOf('.');
+        const base = dot > -1 ? f.name.slice(0, dot) : f.name;
+        imageFileMap[base.toLowerCase()] = f.name; // เทียบแบบไม่สนตัวพิมพ์เล็ก-ใหญ่
+    });
+}
+
+function getPublicImageUrl(name) {
+    const fileName = imageFileMap[String(name).toLowerCase()];
+    if (!fileName) return NO_IMAGE;
+    const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
+    return data ? data.publicUrl : NO_IMAGE;
+}
+
+// --- [ Logic: รันรหัสบอร์ดเกมอัตโนมัติ ] ---
+async function getNextBGID() {
+    const { data } = await supabase.from('boardgame').select('BoardgameID');
+    let max = 0;
+    (data || []).forEach(r => {
+        const n = parseInt(String(r.BoardgameID).replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(n) && n > max) max = n;
+    });
+    return 'BG' + String(max + 1).padStart(3, '0');
+}
+
+// --- [ โหลดรายการบอร์ดเกมทั้งหมด + สถานะกำลังเล่น ] ---
+async function loadBoardgames() {
+    await refreshImageFileMap();
+    const { data: games, error } = await supabase.from('boardgame').select('*');
+    if (error) { console.error(error); showPopupAlert('โหลดข้อมูลบอร์ดเกมไม่สำเร็จ: ' + error.message); return; }
+    boardgames = games || [];
+
+    busyIds = new Set();
+    if (boardgames.length > 0) {
+        const ids = boardgames.map(g => g.BoardgameID);
+        const { data: activeBookings } = await supabase
+            .from('booking')
+            .select('BookID, Status')
+            .in('BookID', ids)
+            .eq('Status', 'กำลังเล่น');
+        (activeBookings || []).forEach(b => busyIds.add(b.BookID));
+    }
+
+    renderGrid();
+    renderCategoryOptions();
+}
+
+function renderGrid() {
+    const grid = document.getElementById('gameGrid');
+    const addCardHTML = `
+        <div class="game-item">
+            <div class="card h-100 card-add-dashed" onclick="openAddGameModal()">
+                <i class="bi bi-plus-circle"></i>
+                <div class="fw-bold">Add New Boardgame</div>
+            </div>
+        </div>`;
+
+    const cardsHTML = boardgames.map(row => {
+        const gid = row.BoardgameID;
+        const imgPath = getPublicImageUrl(row.Name);
+        const isBusy = busyIds.has(gid);
+        const nameEsc = String(row.Name).replace(/'/g, "\\'");
+        return `
+        <div class="game-item">
+            <div class="card h-100 game-card">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light rounded-circle shadow-sm cat-options-btn" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation();">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="openEditGameModal('${gid}', '${nameEsc}', '${imgPath}')"><i class="bi bi-pencil-square"></i> Edit</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="askDeleteGame('${gid}', '${nameEsc}')"><i class="bi bi-trash"></i> Delete</a></li>
+                    </ul>
+                </div>
+                <img src="${imgPath}" onerror="this.src='${NO_IMAGE}'">
+                <div class="card-body p-1 d-flex flex-column">
+                    <h6 class="fw-bold mb-1 game-title">${row.Name}</h6>
+                    <div class="player-info"><i class="bi bi-people-fill"></i> ${row.Player} Players</div>
+                    <p class="small text-muted mb-3 game-cat">${row.Category}</p>
+                    <div class="mt-auto">
+                        ${isBusy
+                            ? `<button class="btn btn-secondary btn-sm w-100 disabled" style="border-radius: 50px;">Booked</button>`
+                            : `<button class="btn btn-success btn-sm w-100" style="border-radius: 50px;" onclick="openModal('${gid}', '${nameEsc}', '${row.Player}')">Reserve</button>`
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    grid.innerHTML = cardsHTML + addCardHTML;
+}
+
+function renderCategoryOptions() {
+    const sel = document.getElementById('catSelection');
+    const cats = [...new Set(boardgames.map(g => g.Category))];
+    const newOpt = sel.querySelector('option[value="NEW"]');
+    sel.innerHTML = '<option value="" disabled selected>-- Choose Category --</option>';
+    cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c; opt.textContent = c;
+        sel.appendChild(opt);
+    });
+    sel.appendChild(newOpt || Object.assign(document.createElement('option'), { value: 'NEW', textContent: '+ Add new category', className: 'text-primary fw-bold' }));
+}
+
+// ---------------------------------------------------------
+// การจอง (save_booking)
+// ---------------------------------------------------------
+document.getElementById('bookingForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const MemberID = document.getElementById('bookMemberID').value.trim();
+    const BoardgameID = document.getElementById('modalGameID').value;
+    const StartTime = document.getElementById('StartTime').value;
+    const EndTime = document.getElementById('EndTime').value;
+    function toDMY(d) { return String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear(); }
+    const DateToday = toDMY(new Date());
+
+    // 1. เช็คว่ามีสมาชิกนี้จริงไหม
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) {
+        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+        showPopupAlert('We can not find that member ID. Please check and try again.', 'back');
+        return;
+    }
+
+    // 2. เช็คกฎ ยืมได้ครั้งละ 1 เกม
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true })
+        .eq('MemberID', MemberID).eq('Status', 'กำลังเล่น');
+    if ((count || 0) >= 1) {
+        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+        showPopupAlert("Booking failed! You've reached your 1 boardgame limit.", 'back');
+        return;
+    }
+
+    // 3. รันรหัส BookingID (BKxxx)
+    const { data: allBookings } = await supabase.from('booking').select('BookingID');
+    let maxB = 0;
+    (allBookings || []).forEach(r => {
+        const n = parseInt(String(r.BookingID).replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(n) && n > maxB) maxB = n;
+    });
+    const BookingID = 'BK' + String(maxB + 1).padStart(3, '0');
+
+    // 4. บันทึกลงฐานข้อมูล
+    const { error } = await supabase.from('booking').insert({
+        BookingID, MemberID, BookID: BoardgameID,
+        BookingDate: DateToday, StartTime, EndTime, Status: 'กำลังเล่น'
+    });
+    bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+
+    showPopupAlert('Booked Complete', 'Status.html', '#3B6540');
+});
+
+// ---------------------------------------------------------
+// เพิ่มบอร์ดเกมใหม่ (add_boardgame)
+// ---------------------------------------------------------
+document.getElementById('addGameForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const BGID = document.getElementById('nextBGIDInput').value;
+    const Name = document.getElementById('addGameName').value.trim();
+    const PlayerRange = document.getElementById('addGamePlayer').value.trim();
+    const catSel = document.getElementById('catSelection').value;
+    const Category = catSel === 'NEW' ? document.getElementById('newCatInp').value.trim() : catSel;
+    const fileInput = document.getElementById('addGameImage');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const ext = file.name.split('.').pop();
+        const { error: upErr } = await supabase.storage.from(STORAGE_BUCKET).upload(Name + '.' + ext, file, { upsert: true });
+        if (upErr) { showPopupAlert('Image upload failed: ' + upErr.message); return; }
+    }
+
+    const { error } = await supabase.from('boardgame').insert({ BoardgameID: BGID, Name, Category, Player: PlayerRange });
+    bootstrap.Modal.getInstance(document.getElementById('addGameModal')).hide();
+    if (error) { showPopupAlert('Add failed: ' + error.message); return; }
+
+    showPopupAlert('Add new ' + Name + ' Boardgame success!', 'reload');
+});
+
+// ---------------------------------------------------------
+// แก้ไขบอร์ดเกม (edit_boardgame)
+// ---------------------------------------------------------
+document.getElementById('editGameForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const BGID = document.getElementById('editGameID').value;
+    const OldName = document.getElementById('editGameOldName').value;
+    const NewName = document.getElementById('editGameName').value.trim();
+    const fileInput = document.getElementById('editGameImage');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const ext = file.name.split('.').pop();
+        await supabase.storage.from(STORAGE_BUCKET).upload(NewName + '.' + ext, file, { upsert: true });
+        if (NewName !== OldName) { await supabase.storage.from(STORAGE_BUCKET).remove([OldName + '.' + ext]).catch(() => {}); }
+    } else if (NewName !== OldName) {
+        // ไม่ได้เปลี่ยนรูป เเต่เปลี่ยนชื่อ -> ย้ายไฟล์เดิมไปชื่อใหม่
+        for (const ext of ['png', 'jpg', 'jpeg', 'svg', 'webp']) {
+            const { error } = await supabase.storage.from(STORAGE_BUCKET).move(OldName + '.' + ext, NewName + '.' + ext);
+            if (!error) break;
+        }
+    }
+
+    const { error } = await supabase.from('boardgame').update({ Name: NewName }).eq('BoardgameID', BGID);
+    bootstrap.Modal.getInstance(document.getElementById('editGameModal')).hide();
+    if (error) { showPopupAlert('Edit failed: ' + error.message); return; }
+
+    showPopupAlert('Edit boardgame success!', 'reload');
+});
+
+// ---------------------------------------------------------
+// ลบบอร์ดเกม (delete_boardgame)
+// ---------------------------------------------------------
+document.getElementById('btnConfirmDeleteOk').addEventListener('click', async function () {
+    if (!pendingDeleteId) return;
+    for (const ext of ['png', 'jpg', 'jpeg', 'svg', 'webp']) {
+        await supabase.storage.from(STORAGE_BUCKET).remove([pendingDeleteName + '.' + ext]).catch(() => {});
+    }
+    const { error } = await supabase.from('boardgame').delete().eq('BoardgameID', pendingDeleteId);
+    bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
+    if (error) { showPopupAlert('Delete failed: ' + error.message); return; }
+    showPopupAlert('Delete boardgame success!', 'reload');
+});
+
+// ---------------------------------------------------------
+// ค้นหาแบบเรียลไทม์
+// ---------------------------------------------------------
+document.getElementById('liveSearch').addEventListener('input', function () {
+    const term = this.value.toLowerCase();
+    const items = document.querySelectorAll('.game-item:not(:last-child)');
+    let count = 0;
+    items.forEach(item => {
+        const titleEl = item.querySelector('.game-title');
+        if (!titleEl) return;
+        const title = titleEl.innerText.toLowerCase();
+        const cat = item.querySelector('.game-cat').innerText.toLowerCase();
+        if (title.includes(term) || cat.includes(term)) { item.style.display = ''; count++; }
+        else { item.style.display = 'none'; }
+    });
+    document.getElementById('searchCount').innerText = term ? `Found ${count} Results` : '';
+});
+
+document.getElementById('acceptTerms').addEventListener('change', function () {
+    document.getElementById('btnConfirmBooking').disabled = !this.checked;
+});
+
+window.openModal = function (id, name, players) {
+    document.getElementById('modalGameID').value = id;
+    document.getElementById('modalGameName').innerHTML = 'Choose : ' + name;
+    document.getElementById('playerSuggest').innerHTML = "<i class='bi bi-info-circle'></i> Player : " + players + ' persons';
+    document.getElementById('bookMemberID').value = '';
+    document.getElementById('StartTime').value = '';
+    document.getElementById('EndTime').value = '';
+    document.getElementById('acceptTerms').checked = false;
+    document.getElementById('btnConfirmBooking').disabled = true;
+    new bootstrap.Modal(document.getElementById('bookingModal')).show();
+};
+
+window.openAddGameModal = async function () {
+    document.getElementById('addGameForm').reset();
+    document.getElementById('addGameImagePreviewBox').classList.add('d-none');
+    document.getElementById('newCatDiv').classList.add('d-none');
+    document.getElementById('nextBGIDInput').value = await getNextBGID();
+    new bootstrap.Modal(document.getElementById('addGameModal')).show();
+};
+
+window.previewGameImage = function (input, boxId) {
+    const box = document.getElementById(boxId);
+    const img = box.querySelector('img');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) { img.src = e.target.result; box.classList.remove('d-none'); };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.openEditGameModal = function (id, name, imgSrc) {
+    document.getElementById('editGameID').value = id;
+    document.getElementById('editGameOldName').value = name;
+    document.getElementById('editGameName').value = name;
+    document.getElementById('editGameImage').value = '';
+    const box = document.getElementById('editGameImagePreviewBox');
+    box.querySelector('img').src = imgSrc;
+    box.classList.remove('d-none');
+    new bootstrap.Modal(document.getElementById('editGameModal')).show();
+};
+
+window.askDeleteGame = function (id, name) {
+    pendingDeleteId = id; pendingDeleteName = name;
+    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+};
+
+window.calcEndTime = function () {
+    const start = document.getElementById('StartTime').value;
+    if (start) {
+        let [h, m] = start.split(':').map(Number);
+        let eh = h + 2;
+        if (eh > 20 || (eh === 20 && m > 0)) { eh = 20; m = 0; } // ห้องสมุดปิด 20.00 น.
+        document.getElementById('EndTime').value = String(eh).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+};
+
+window.checkNewCat = function () {
+    const sel = document.getElementById('catSelection');
+    const div = document.getElementById('newCatDiv');
+    if (sel.value === 'NEW') { div.classList.remove('d-none'); document.getElementById('newCatInp').required = true; }
+    else { div.classList.add('d-none'); document.getElementById('newCatInp').required = false; }
+};
+
+// Floating feedback button ลอยเหนือ footer
+window.addEventListener('scroll', function () {
+    const btn = document.querySelector('.floating-feedback-btn');
+    const footer = document.querySelector('.main-footer');
+    if (!footer || !btn) return;
+    const scrollPos = window.innerHeight + window.scrollY;
+    const footerTop = footer.offsetTop;
+    if (scrollPos >= footerTop) {
+        btn.style.position = 'absolute';
+        btn.style.top = (footerTop - btn.offsetHeight - 30) + 'px';
+        btn.style.bottom = 'auto';
+    } else {
+        btn.style.position = 'fixed';
+        btn.style.top = '';
+        btn.style.bottom = '30px';
+    }
+});
+
+loadBoardgames();
+</script>
+</body>
+</html>

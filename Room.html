@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* 1. ฟอนต์ Prompt ตัวหนาทั้งเว็บ */
+        @font-face {
+            font-family: 'PromptRegular';
+            src: url('PromptRegular.ttf') format('truetype');
+        }
+        * {
+            font-family: 'PromptRegular' !important;
+            font-weight: bold !important;
+        }
+        body { background-color: #f0f7ff !important; }
+
+        /* 2. การตกแต่ง Header & Navbar */
+        .main-header {
+            background: #2b5484;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .header-top {
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-logo-large {
+            height: 85px;
+            width: auto;
+            margin-right: 25px;
+        }
+        .learning-title {
+            color: #ffffff;
+            font-size: 2.2rem;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .navbar-custom {
+            padding: 5px 30px !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 1.1rem;
+            padding: 10px 18px !important;
+            margin: 5px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #ffffff !important;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+
+        .dropdown-menu {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            padding: 8px;
+            overflow: hidden;
+        }
+        .dropdown-item {
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active {
+            background-color: #f0f7ff;
+            color: #2b5484 !important;
+        }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Index.html">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calendar-check me-1"></i> Reservation
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item active" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Status.html">
+                            <i class="bi bi-info-circle me-1"></i> Status
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Dashboard.html">
+                            <i class="bi bi-graph-up me-1"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Contact.html">
+                            <i class="bi bi-telephone me-1"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
+                             alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Popup Alert (replaces old browser alert() pop-ups) -->
+<div class="modal fade" id="popupAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" id="popupAlertClose" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-3 px-4">
+                <div class="mb-2"><i id="popupAlertIcon" class="bi bi-info-circle-fill fs-1"></i></div>
+                <p id="popupAlertMessage" class="mb-0 fs-5 fw-bold text-dark"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4 pt-0">
+                <button type="button" class="btn px-4" id="popupAlertOk" data-bs-dismiss="modal" style="border-radius: 50px; font-weight: bold; border:none;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showPopupAlert(message, redirect, color) {
+    var msgEl = document.getElementById('popupAlertMessage');
+    if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
+    var success = !!color;
+    var tone = success ? '#3B6540' : '#AB1C1C';
+    var iconEl = document.getElementById('popupAlertIcon');
+    if (iconEl) { iconEl.className = success ? 'bi bi-check-circle-fill fs-1' : 'bi bi-exclamation-circle-fill fs-1'; iconEl.style.color = tone; }
+    var okBtn = document.getElementById('popupAlertOk');
+    if (okBtn) { okBtn.style.backgroundColor = tone; okBtn.style.color = '#fff'; }
+    var modalEl = document.getElementById('popupAlertModal');
+    var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.addEventListener('hidden.bs.modal', function onHide() {
+        modalEl.removeEventListener('hidden.bs.modal', onHide);
+        if (redirect === 'back') { window.history.back(); }
+        else if (redirect) { window.location.href = redirect; }
+    });
+    modalInstance.show();
+}
+</script>
+
+<style>
+    .main-container { max-width: 1350px; margin: 0 auto; padding: 40px 7%; }
+    .title-header { text-align: center; margin-bottom: 40px; }
+    .title-header h2 { font-weight: 800; color: #1e293b; font-size: 2.2rem; }
+
+    /* Search Style */
+    .search-wrapper { max-width: 700px; margin: 40px auto; }
+    .search-group { display: flex; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .search-input { border: none; flex: 1; padding: 10px 25px; border-radius: 50px; outline: none; font-size: 1rem; }
+    .search-btn { background: #2b7fd3; color: white; border: none; padding: 10px 30px; border-radius: 50px; transition: 0.3s; font-weight: bold; }
+    .search-btn:hover { background: #0d6fd1; }
+
+    /* Room Cards & Hover Animation */
+    .room-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+    .room-card {
+        background: white; border-radius: 20px; padding: 18px; border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;
+        text-align: center; display: flex; flex-direction: column; height: 100%;
+    }
+    .room-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+    .room-card { position: relative; }
+
+    /* เมนู 3 จุด บนการ์ดห้องประชุม (สไตล์เดียวกับ Book.php) */
+    .cat-options-btn {
+        position: absolute; top: 9px; right: 9px; z-index: 5;
+        width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.9);
+    }
+
+    /* การ์ดเพิ่มห้องประชุม (CSS + hover เหมือน Book.php) */
+    .card-add-category { border: 2px dashed #cbd5e0 !important; background: #f8f9fa; cursor: pointer; min-height: 310px; border-radius: 20px; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .card-add-category:hover { border-color: #28a745 !important; background: #f4fff8; transform: translateY(-5px); }
+    .card-add-category i { color: #cbd5e0; font-size: 3.5rem; }
+    .card-add-category:hover i { color: #28a745; }
+    .add-text { color: #718096; font-weight: bold; margin-top: 10px; }
+    .card-add-category:hover .add-text { color: #28a745; }
+    .room-card img { width: 100%; height: 170px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; }
+
+    .room-cat { color: #3b82f6; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 5px; }
+    .room-name { font-size: 1.15rem; color: #1e293b; margin-bottom: 5px; }
+    .room-info { color: #64748b; font-size: 0.85rem; margin-bottom: 18px; }
+
+    /* Buttons */
+    .btn-action {
+        padding: 10px; border-radius: 50px; width: 100%; font-size: 0.9rem;
+        border: none; transition: 0.3s; margin-top: auto; display: block;
+    }
+    .btn-reserve { background: #198754; color: white; }
+    .btn-reserve:hover { background: #146c43; }
+    .btn-busy { background: #6c757d; color: white; cursor: not-allowed; }
+
+    /* Modal Styling */
+    .booking-modal-content { background-color: #fffef2 !important; border-radius: 25px !important; border: none !important; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .booking-alert {
+        background-color: #e0f7fa !important;
+        color: #006064 !important;
+        border-radius: 12px !important;
+        border: none !important;
+        font-size: 1rem;
+        padding: 8px 15px !important;
+        text-align: left !important;
+    }
+    .form-control, .form-select { border-radius: 12px; padding: 10px 15px; border: 1px solid #e2e8f0; font-size: 0.9rem; }
+
+    @media (max-width: 1200px) { .room-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) { .room-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* สไตล์ปุ่มลอย */
+    .floating-feedback-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        padding: 12px 25px;
+        border-radius: 50px;
+        border: 2px solid #fff;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+    .floating-feedback-btn:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+    }
+
+    /* สไตล์ตัวเลือก Rating ใน Modal */
+    .rating-option { cursor: pointer; }
+    .rating-box { color: #ccc; transition: all 0.2s; }
+    .rating-box:hover { color: #666; transform: scale(1.1); }
+
+    .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+    .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+
+    .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+    .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #ffc107; }
+
+    /* สไตล์ของ Footer */
+    .main-footer {
+        background: #2b5484;
+        color: white;
+        padding: 25px 0;
+        border-top: 3px solid rgba(255,255,255,0.1);
+        width: 100%;
+    }
+    .footer-contact-pill {
+        background: rgba(255,255,255,0.15);
+        padding: 10px 25px;
+        border-radius: 50px;
+        display: inline-block;
+        font-size: 1.1rem;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+    main, .container { flex: 1; }
+</style>
+
+<div class="main-container">
+    <h2 class="text-center mb-5 fw-bold"><i class="bi bi-door-open me-2 text-primary"></i> Room Reservation</h2>
+
+    <div class="search-wrapper">
+        <div class="search-group">
+            <input type="text" id="liveSearch" class="search-input" placeholder="Search for room or category...">
+            <button class="search-btn"><i class="bi bi-search me-2"></i>Search</button>
+        </div>
+        <div id="searchCount" class="text-center mt-2 small text-muted"></div>
+    </div>
+
+    <div class="room-grid" id="roomGrid">
+        <div class="room-item">
+            <div class="card h-100 card-add-category" onclick="openAddRoomModal()">
+                <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-plus-circle"></i>
+                    <div class="add-text">เพิ่มห้องประชุมใหม่</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="bookingModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0 px-4 pt-4">
+        <h5 class="modal-title fw-bold">Confirm Room Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="bookingForm">
+          <div class="modal-body p-4">
+            <input type="hidden" id="bookRID">
+
+            <div id="bookRName" class="alert booking-alert mb-4"></div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="bookMemberID" class="form-control" placeholder="Input MemberID..." required style="border-radius: 12px;">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Booking Date</label>
+                <select id="bookBookingDate" class="form-select" style="border-radius: 12px;">
+                    <option id="optToday">Today</option>
+                    <option id="optTomorrow">Tomorrow</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label class="small fw-bold">Start Time (08:00-20:00)</label>
+                    <input type="time" id="RoomStartTime" class="form-control" min="08:00" max="19:59" required onchange="calcRoomEndTime()" style="border-radius: 12px;">
+                </div>
+                <div class="col-6">
+                    <label class="small fw-bold">End Time (3 hours limit)</label>
+                    <input type="time" id="RoomEndTime" class="form-control" readonly style="border-radius: 12px; background-color: #f8f9fa;">
+                </div>
+            </div>
+
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" id="acceptTerms">
+                <label class="form-check-label small" for="acceptTerms">
+                    I agree to inspect the room before using and will be responsible for any damages.
+                </label>
+            </div>
+          </div>
+
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 50px;">Cancel</button>
+            <button type="submit" class="btn btn-success px-4" id="btnConfirmBooking" disabled style="border-radius: 50px; font-weight: bold;">Comfirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addRoomModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px; border: none;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-primary">Add new Room</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="addRoomForm">
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="small fw-bold">RoomID (Auto)</label>
+                <input type="text" id="nextRoomIDInput" class="form-control bg-light" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Name</label>
+                <input type="text" id="addRoomName" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Room Type</label>
+                <select id="typeSelect" class="form-select" onchange="toggleNewType()" required style="border-radius: 12px;">
+                    <option value="" disabled selected>-- Choose Room Type --</option>
+                    <option value="NEW" class="text-primary fw-bold">+ Add new room type</option>
+                </select>
+            </div>
+            <div id="newTypeDiv" class="mb-3 d-none">
+                <input type="text" id="newTypeInput" class="form-control border-primary" placeholder="Input new room type..." style="border-radius: 12px;">
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold">Capacity (people)</label>
+                <input type="number" id="addRoomCapacity" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-2">
+                <label class="small fw-bold">Room Image</label>
+                <input type="file" id="addRoomImage" class="form-control" accept="image/*" required style="border-radius: 12px;" onchange="previewRoomImage(this, 'addRoomImagePreviewBox')">
+            </div>
+            <div id="addRoomImagePreviewBox" class="d-none" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:12px; margin-top:10px;">
+                <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:10px;">
+            </div>
+        </div>
+        <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editRoomModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px; border: none;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-primary">Edit Room</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="editRoomForm">
+        <div class="modal-body">
+            <input type="hidden" id="editRoomID">
+            <div class="mb-3">
+                <label class="small fw-bold">Name</label>
+                <input type="text" id="editRoomName" class="form-control" required style="border-radius: 12px;">
+            </div>
+            <div class="mb-2">
+                <label class="small fw-bold">Room Image (leave empty to keep current)</label>
+                <input type="file" id="editRoomImage" class="form-control" accept="image/*" style="border-radius: 12px;" onchange="previewRoomImage(this, 'editRoomImagePreviewBox')">
+            </div>
+            <div id="editRoomImagePreviewBox" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:12px; margin-top:10px;">
+                <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:10px;" onerror="this.src='https://via.placeholder.com/400x250?text=Room+Image'">
+            </div>
+        </div>
+        <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger">Comfirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center text-muted">
+                Are you sure you want to delete this? This action cannot be undone.
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-danger px-4" id="btnConfirmDeleteOk" style="border-radius: 50px;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="bg-warning bg-opacity-10 p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-chat-heart fs-1 text-warning"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-frown fs-1"></i>
+                                <span class="d-block small mt-1">ปรับปรุง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-neutral fs-1"></i>
+                                <span class="d-block small mt-1">ปานกลาง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-laughing fs-1"></i>
+                                <span class="d-block small mt-1">ดีเยี่ยม</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm" style="border-radius: 12px;">
+                        ส่งความคิดเห็น <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="container text-center">
+        <div class="footer-contact-pill">
+            📞 ติดต่อ โทร 012-345 6789
+        </div>
+        <div class="mt-2 opacity-50 small">
+            &copy; 2026 Learning Commons. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://wzjbaxnrppvfrnncttne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
+const STORAGE_BUCKET = 'room-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน (แยกจาก boardgame-images)
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const NO_IMAGE = 'https://via.placeholder.com/400x250?text=Room+Image';
+let rooms = [];
+let pendingDeleteId = null;
+
+// รูปห้องเก็บเป็น "<RoomID>.jpg" เสมอ (ตามพฤติกรรมเดิมของ PHP ที่ move_uploaded_file เป็น .jpg ทุกครั้ง)
+function getPublicImageUrl(rid) {
+    const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(rid + '.jpg');
+    return data ? data.publicUrl + '?t=' + Date.now() : NO_IMAGE;
+}
+
+async function getNextRoomID() {
+    const { data } = await supabase.from('room').select('RoomID');
+    let max = 0;
+    (data || []).forEach(r => {
+        const n = parseInt(String(r.RoomID).replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(n) && n > max) max = n;
+    });
+    return 'R' + String(max + 1).padStart(3, '0');
+}
+
+async function loadRooms() {
+    const { data: roomRows, error } = await supabase.from('room').select('*');
+    if (error) { console.error(error); showPopupAlert('โหลดข้อมูลห้องประชุมไม่สำเร็จ: ' + error.message); return; }
+    rooms = roomRows || [];
+
+    let busyIds = new Set();
+    if (rooms.length > 0) {
+        const ids = rooms.map(r => r.RoomID);
+        const { data: activeBookings } = await supabase.from('booking').select('BookID').in('BookID', ids).eq('Status', 'กำลังใช้งาน');
+        (activeBookings || []).forEach(b => busyIds.add(b.BookID));
+    }
+
+    renderGrid(busyIds);
+    renderRoomTypeOptions();
+}
+
+function renderGrid(busyIds) {
+    const grid = document.getElementById('roomGrid');
+    const addCardHTML = `
+        <div class="room-item">
+            <div class="card h-100 card-add-category" onclick="openAddRoomModal()">
+                <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-plus-circle"></i>
+                    <div class="add-text">เพิ่มห้องประชุมใหม่</div>
+                </div>
+            </div>
+        </div>`;
+
+    const cardsHTML = rooms.map(r => {
+        const rid = r.RoomID;
+        const img = getPublicImageUrl(rid);
+        const isBusy = busyIds.has(rid);
+        const nameEsc = String(r.Name).replace(/'/g, "\\'");
+        const searchTxt = (r.Name + ' ' + r.RoomType).toLowerCase();
+        return `
+        <div class="room-item">
+            <div class="room-card" data-search="${searchTxt}">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light rounded-circle shadow-sm cat-options-btn" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation();">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="openEditRoomModal('${rid}', '${nameEsc}', '${img}')"><i class="bi bi-pencil-square"></i> แก้ไข</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="askDeleteRoom('${rid}')"><i class="bi bi-trash"></i> ลบ</a></li>
+                    </ul>
+                </div>
+                <img src="${img}" onerror="this.src='${NO_IMAGE}'">
+                <div class="room-cat">${r.RoomType}</div>
+                <div class="room-name">${r.Name}</div>
+                <div class="room-info">Capacity : ${r.Capacity} person</div>
+                ${isBusy
+                    ? `<button class="btn-action btn-busy" disabled>Booked</button>`
+                    : `<button class="btn-action btn-reserve" onclick="openBookingModal('${rid}', '${nameEsc}')">Reserve</button>`
+                }
+            </div>
+        </div>`;
+    }).join('');
+
+    grid.innerHTML = cardsHTML + addCardHTML;
+}
+
+function renderRoomTypeOptions() {
+    const sel = document.getElementById('typeSelect');
+    const types = [...new Set(rooms.map(r => r.RoomType))];
+    const newOpt = sel.querySelector('option[value="NEW"]');
+    sel.innerHTML = '<option value="" disabled selected>-- Choose Room Type --</option>';
+    types.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        sel.appendChild(opt);
+    });
+    sel.appendChild(newOpt);
+}
+
+// ---------------------------------------------------------
+// การจอง (save_booking)
+// ---------------------------------------------------------
+document.getElementById('bookingForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const MemberID = document.getElementById('bookMemberID').value.trim();
+    const RoomID = document.getElementById('bookRID').value;
+    const StartTime = document.getElementById('RoomStartTime').value;
+    const EndTime = document.getElementById('RoomEndTime').value;
+    const BookingDate = document.getElementById('bookBookingDate').value;
+
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) {
+        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+        showPopupAlert('We can not find that member ID. Please check and try again.', 'back');
+        return;
+    }
+
+    const { data: allBookings } = await supabase.from('booking').select('BookingID');
+    let maxB = 0;
+    (allBookings || []).forEach(r => {
+        const n = parseInt(String(r.BookingID).replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(n) && n > maxB) maxB = n;
+    });
+    const BookingID = 'BK' + String(maxB + 1).padStart(3, '0');
+
+    const { error } = await supabase.from('booking').insert({
+        BookingID, MemberID, BookID: RoomID, BookingDate, StartTime, EndTime, Status: 'กำลังใช้งาน'
+    });
+    bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+    showPopupAlert('Booked Complete', 'Status.html', '#3B6540');
+});
+
+// ---------------------------------------------------------
+// เพิ่มห้องประชุมใหม่ (add_new_room)
+// ---------------------------------------------------------
+document.getElementById('addRoomForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const RID = document.getElementById('nextRoomIDInput').value;
+    const Name = document.getElementById('addRoomName').value.trim();
+    const Capacity = document.getElementById('addRoomCapacity').value;
+    const typeSel = document.getElementById('typeSelect').value;
+    const RoomType = typeSel === 'NEW' ? document.getElementById('newTypeInput').value.trim() : typeSel;
+    const fileInput = document.getElementById('addRoomImage');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const { error: upErr } = await supabase.storage.from(STORAGE_BUCKET).upload(RID + '.jpg', fileInput.files[0], { upsert: true });
+        if (upErr) { showPopupAlert('Image upload failed: ' + upErr.message); return; }
+    }
+
+    const { error } = await supabase.from('room').insert({ RoomID: RID, Name, Capacity, RoomType });
+    if (error) { showPopupAlert('Add failed: ' + error.message); return; }
+
+    window.location.reload();
+});
+
+// ---------------------------------------------------------
+// แก้ไขห้องประชุม (edit_room)
+// ---------------------------------------------------------
+document.getElementById('editRoomForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const RID = document.getElementById('editRoomID').value;
+    const Name = document.getElementById('editRoomName').value.trim();
+    const fileInput = document.getElementById('editRoomImage');
+
+    if (fileInput.files && fileInput.files[0]) {
+        await supabase.storage.from(STORAGE_BUCKET).upload(RID + '.jpg', fileInput.files[0], { upsert: true });
+    }
+
+    const { error } = await supabase.from('room').update({ Name }).eq('RoomID', RID);
+    bootstrap.Modal.getInstance(document.getElementById('editRoomModal')).hide();
+    if (error) { showPopupAlert('Edit failed: ' + error.message); return; }
+    showPopupAlert('Great! The room has been updated.', 'Room.html');
+});
+
+// ---------------------------------------------------------
+// ลบห้องประชุม (delete_room)
+// ---------------------------------------------------------
+document.getElementById('btnConfirmDeleteOk').addEventListener('click', async function () {
+    if (!pendingDeleteId) return;
+    await supabase.storage.from(STORAGE_BUCKET).remove([pendingDeleteId + '.jpg']).catch(() => {});
+    const { error } = await supabase.from('room').delete().eq('RoomID', pendingDeleteId);
+    bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
+    if (error) { showPopupAlert('Delete failed: ' + error.message); return; }
+    showPopupAlert('Done! The room has been deleted.', 'Room.html');
+});
+
+// ---------------------------------------------------------
+// ค้นหาแบบเรียลไทม์
+// ---------------------------------------------------------
+document.getElementById('liveSearch').addEventListener('input', function() {
+    let term = this.value.toLowerCase();
+    document.querySelectorAll('.room-item').forEach(item => {
+        let card = item.querySelector('.room-card');
+        if(card) {
+            let text = card.getAttribute('data-search');
+            item.style.display = (text && text.includes(term)) ? "" : "none";
+        }
+    });
+});
+
+document.getElementById('acceptTerms').addEventListener('change', function() {
+    document.getElementById('btnConfirmBooking').disabled = !this.checked;
+});
+
+window.openBookingModal = function (id, name) {
+    const today = new Date();
+    const tomorrow = new Date(today.getTime() + 86400000);
+    const fmt = d => String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear();
+    const fmtTH = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    document.getElementById('optToday').value = fmt(today);
+    document.getElementById('optToday').textContent = `Today (${fmtTH(today)})`;
+    document.getElementById('optTomorrow').value = fmt(tomorrow);
+    document.getElementById('optTomorrow').textContent = `Tomorrow (${fmtTH(tomorrow)})`;
+
+    document.getElementById('bookRID').value = id;
+    document.getElementById('bookRName').innerHTML = "Choose : " + name;
+    document.getElementById('bookMemberID').value = '';
+    document.getElementById('RoomStartTime').value = '';
+    document.getElementById('RoomEndTime').value = '';
+    document.getElementById('acceptTerms').checked = false;
+    document.getElementById('btnConfirmBooking').disabled = true;
+    new bootstrap.Modal(document.getElementById('bookingModal')).show();
+};
+
+window.openAddRoomModal = async function () {
+    document.getElementById('addRoomForm').reset();
+    document.getElementById('addRoomImagePreviewBox').classList.add('d-none');
+    document.getElementById('newTypeDiv').classList.add('d-none');
+    document.getElementById('nextRoomIDInput').value = await getNextRoomID();
+    new bootstrap.Modal(document.getElementById('addRoomModal')).show();
+};
+
+window.previewRoomImage = function (input, boxId) {
+    const box = document.getElementById(boxId);
+    const img = box.querySelector('img');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            box.classList.remove('d-none');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.openEditRoomModal = function (id, name, imgSrc) {
+    document.getElementById('editRoomID').value = id;
+    document.getElementById('editRoomName').value = name;
+    document.getElementById('editRoomImagePreviewBox').querySelector('img').src = imgSrc;
+    new bootstrap.Modal(document.getElementById('editRoomModal')).show();
+};
+
+window.askDeleteRoom = function (id) {
+    pendingDeleteId = id;
+    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+};
+
+window.toggleNewType = function () {
+    const s = document.getElementById('typeSelect');
+    document.getElementById('newTypeDiv').classList.toggle('d-none', s.value !== 'NEW');
+};
+
+window.calcRoomEndTime = function () {
+    const start = document.getElementById('RoomStartTime').value;
+    if (start) {
+        let [h, m] = start.split(':').map(Number);
+        let eh = h + 3;
+        if (eh > 20 || (eh === 20 && m > 0)) { eh = 20; m = 0; } // ห้องสมุดปิด 20.00 น.
+        document.getElementById('RoomEndTime').value = String(eh).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+};
+
+loadRooms();
+</script>
+</body>
+</html>

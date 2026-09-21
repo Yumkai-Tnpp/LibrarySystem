@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* 1. ฟอนต์ Prompt ตัวหนาทั้งเว็บ */
+        @font-face {
+            font-family: 'PromptRegular';
+            src: url('PromptRegular.ttf') format('truetype');
+        }
+        * {
+            font-family: 'PromptRegular' !important;
+            font-weight: bold !important;
+        }
+        body { background-color: #f0f7ff !important; }
+
+        /* 2. การตกแต่ง Header & Navbar */
+        .main-header {
+            background: #2b5484;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        /* บรรทัดบน: Logo + Title */
+        .header-top {
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-logo-large {
+            height: 85px;
+            width: auto;
+            margin-right: 25px;
+        }
+        .learning-title {
+            color: #ffffff;
+            font-size: 2.2rem;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* บรรทัดล่าง: Menu + Admin */
+        .navbar-custom {
+            padding: 5px 30px !important;
+        }
+
+        /* เมนูฝั่งซ้าย */
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 1.1rem;
+            padding: 10px 18px !important;
+            margin: 5px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover & Active State: กรอบจะค้างเมื่ออยู่หน้านั้นๆ */
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #ffffff !important;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* เมนู Admin ฝั่งขวา */
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+
+        /* Dropdown Menu Style */
+        .dropdown-menu {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            padding: 8px;
+            overflow: hidden;
+        }
+        .dropdown-item {
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active {
+            background-color: #f0f7ff;
+            color: #2b5484 !important;
+        }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+
+        /* สไตล์ระเบียบการ (Rule Cards) */
+        .rule-list { list-style: none; }
+        .rule-list li {
+            position: relative; padding-left: 28px; margin-bottom: 12px;
+            font-size: 0.95rem; color: #444; line-height: 1.4;
+        }
+        .rule-list li::before {
+            content: "\F26A"; font-family: "bootstrap-icons";
+            position: absolute; left: 0; color: #0d6efd; font-weight: bold;
+        }
+        .rule-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px; overflow: hidden;
+        }
+        .rule-card:hover { transform: translateY(-10px); box-shadow: 0 12px 25px rgba(0,0,0,0.1) !important; }
+        .rule-list b { color: #dc3545; font-weight: 700; }
+
+        /* สไตล์ปุ่ม Action */
+        .btn-custom {
+            padding: 12px 30px; border-radius: 12px; transition: all 0.3s ease;
+            text-decoration: none; display: inline-flex; align-items: center; font-weight: bold;
+        }
+        .btn-room { background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb; }
+        .btn-game { background: #e8f5e9; color: #388e3c; border: 1px solid #c8e6c9; }
+        .btn-book { background: #fff3e0; color: #f57c00; border: 1px solid #ffe0b2; }
+        .btn-custom:hover { transform: translateY(-3px) scale(1.05); filter: brightness(0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+
+        /* สไตล์ Q&A (คำถามสีดำ - คำตอบสีแดง) */
+        .accordion-item {
+            border-radius: 12px !important; overflow: hidden;
+            border: 1px solid #f0f4f8 !important; background: white;
+        }
+        .faq-question {
+            background-color: white !important;
+            color: #000000 !important;
+            padding: 22px !important; box-shadow: none !important;
+        }
+        .faq-question:not(.collapsed) {
+            background-color: #f8fbff !important;
+            border-bottom: 1px solid #f1f4f9;
+        }
+        .faq-answer {
+            color: #dc3545 !important;
+            background-color: #ffffff;
+            padding: 20px 25px 20px 65px !important;
+            font-size: 1rem; line-height: 1.7;
+        }
+        .accordion-button::after { background-size: 1.1rem; }
+
+        /* สไตล์ปุ่มลอย (Floating Feedback Button) - สีเหลือง Warning */
+        .floating-feedback-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 2px solid #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+        .floating-feedback-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+        }
+
+        /* ปุ่มส่งใน Modal - เทา-ดำ */
+        .submit-btn-custom {
+            background-color: #343a40 !important;
+            border: none;
+            color: #fff !important;
+        }
+        .submit-btn-custom:hover {
+            background-color: #23272b !important;
+        }
+
+        /* สไตล์ไอคอนหัวใจ (ตัวโลโก้มีสี แต่ไม่มีพื้นหลัง) */
+        .feedback-heart-icon {
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .feedback-teal-text {
+            color: #17a2b8 !important;
+        }
+
+        /* สไตล์ Rating & Modal */
+        .rating-option { cursor: pointer; }
+        .rating-box { color: #ccc; transition: all 0.2s; }
+
+        .rating-red .btn-check:checked + .rating-box { color: #dc3545 !important; transform: scale(1.2); }
+        .rating-yellow .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+        .rating-green .btn-check:checked + .rating-box { color: #198754 !important; transform: scale(1.2); }
+
+        .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+        .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+        .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #17a2b8; }
+
+        /* สไตล์ของ Footer */
+        .main-footer {
+            background: #2b5484;
+            color: white;
+            padding: 25px 0;
+            border-top: 3px solid rgba(255,255,255,0.1);
+            width: 100%;
+            margin-top: auto;
+        }
+        .footer-contact-pill {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .accordion { margin-bottom: 0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Index.html">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calendar-check me-1"></i> Reservation
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Status.html">
+                            <i class="bi bi-info-circle me-1"></i> Status
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Dashboard.html">
+                            <i class="bi bi-graph-up me-1"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Contact.html">
+                            <i class="bi bi-telephone me-1"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
+                             alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Home -->
+<div class="container py-5">
+    <h2 class="text-center mb-5 fw-bold text-dark">
+        <br>
+        <i class="bi bi-journal-check me-2 text-primary"></i>ระเบียบการใช้บริการห้องสมุด
+    </h2>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm rule-card">
+                <div class="card-header bg-primary text-white py-3 text-center">
+                    <h5 class="card-title mb-0"><i class="bi bi-door-open me-2"></i>ห้องประชุม</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">⏱️ ใช้งานห้องประชุมได้ไม่เกิน <b class="text-danger">3 ชั่วโมง/ครั้ง</b></li>
+                        <li class="mb-2">📅 จองห้องประชุมล่วงหน้า <b class="text-danger">ไม่เกิน 1 วัน</b></li>
+                        <li class="mb-2">✅ ยืนยันตัวก่อนเริ่มใช้งานห้องประชุม <b class="text-danger">15 นาที</b></li>
+                        <li class="mb-2">❌ สายเกิน 15 นาที <b class="text-danger">ห้องประชุมจะถูกยกเลิกอัตโนมัติ</b></li>
+                        <li class="mb-2">🚫 ผิดนัด 3 ครั้ง <b class="text-danger">แบน 7 วัน</b></li>
+                        <li class="mb-2">➕ ต่อเวลาได้ <b class="text-danger">1 ชั่วโมง</b> (1 ครั้ง หากไม่มีคิวต่อ)</li>
+                        <li class="mb-2">🧹 รักษาความสะอาด / งดเสียงดัง</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm rule-card">
+                <div class="card-header bg-success text-white py-3 text-center">
+                    <h5 class="card-title mb-0"><i class="bi bi-dice-5 me-2"></i>บอร์ดเกม</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">🎲 ยืมบอร์ดเกมได้ครั้งละ <b class="text-danger">1 เกม</b></li>
+                        <li class="mb-2">⏳ ระยะเวลาเล่นบอร์ดเกม <b class="text-danger">2 ชั่วโมง</b></li>
+                        <li class="mb-2">➕ ต่อเวลาเล่นได้ <b class="text-danger">1 ชั่วโมง</b> (1 ครั้ง หากไม่มีคิวต่อ)</li>
+                        <li class="mb-2">🔍 ตรวจสอบอุปกรณ์ก่อนเล่น</li>
+                        <li class="mb-2">⚠️ หากอุปกรณ์สูญหาย/เสียหาย <b class="text-danger">ต้องรับผิดชอบ</b></li>
+                        <li class="mb-2">📦 จัดเก็บอุปกรณ์ให้ครบก่อนนำมาคืน</li>
+                        <li class="mb-2">🤝 แบ่งปันพื้นที่กับผู้อื่น</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+            <div class="card h-100 border-0 shadow-sm rule-card">
+                <div class="card-header bg-warning text-dark py-3 text-center">
+                    <h5 class="card-title mb-0"><i class="bi bi-book me-2"></i>หนังสือ</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">📚 ยืมหนังสือได้ไม่เกิน <b class="text-danger">3 เล่ม/ครั้ง</b></li>
+                        <li class="mb-2">📅 ระยะเวลายืมหนังสือ <b class="text-danger">7 วัน</b></li>
+                        <li class="mb-2">➕ ยืมหนังสือต่อได้ <b class="text-danger">7 วัน</b> (1 ครั้ง หากไม่มีคิวต่อ)</li>
+                        <li class="mb-2">💰 คืนล่าช้า <b class="text-danger">5 บาท/วัน/เล่ม</b></li>
+                        <li class="mb-2">📖 สูญหาย <b class="text-danger">ชดใช้ตามราคาจริง</b></li>
+                        <li class="mb-2">🧹 รักษาหนังสือให้คงอยู่สภาพเดิม</li>
+                        <li class="mb-2">🔖 <span class="text-danger"><b>ห้ามพับหรือขีดเขียนในหนังสือ</b></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <div class="action-group d-flex justify-content-center flex-wrap gap-3 mb-5">
+        <a href="Room.html" class="btn btn-custom btn-room shadow-sm">
+            <i class="bi bi-door-open me-2"></i> จองห้องประชุม
+        </a>
+        <a href="Boardgame.html" class="btn btn-custom btn-game shadow-sm">
+            <i class="bi bi-dice-5 me-2"></i> จองบอร์ดเกม
+        </a>
+        <a href="Book.html" class="btn btn-custom btn-book shadow-sm">
+            <i class="bi bi-book me-2"></i> ยืมหนังสือ
+        </a>
+    </div>
+
+    <hr class="container opacity-10 my-5">
+
+    <div class="container py-5">
+        <h2 class="text-center mb-5 fw-bold text-dark">
+            <i class="bi bi-question-circle me-2 text-primary"></i> คำถามที่พบบ่อย (Q&A)
+        </h2>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="accordion shadow-sm" id="mainFaqAccordion">
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <i class="bi bi-wifi me-3 text-primary"></i> ภายใน Learning Commons มีปลั๊กไฟและ Wi-Fi ให้บริการทุกจุดไหม?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : มีปลั๊กไฟและสัญญาณ Wi-Fi ความเร็วสูงครอบคลุมทุกที่นั่ง เพื่อสนับสนุนการทำงานและการวิจัยของสมาชิกอย่างเต็มที่
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <i class="bi bi-controller me-3 text-success"></i> มีบอร์ดเกมแนวไหนบ้าง และต้องเตรียมอะไรมาไหมตอนยืม?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : เรามีบอร์ดเกมหลากหลายแนว ทั้งแนววางแผนและปาร์ตี้ เพียงยื่นบัตรสมาชิกก็ยืมได้ครั้งละ 1 เกม เล่นได้ 2 ชั่วโมง
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <i class="bi bi-journal-bookmark-fill me-3 text-warning"></i> ถ้าหนังสือที่อยากอ่านมีคนยืมไปแล้ว สามารถลงชื่อจองต่อได้ไหม?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : สามารถลงชื่อจองคิวไว้ได้ ซึ่งหนังสือที่มีคิวจองต่อจะไม่สามารถต่ออายุการยืมได้ เพื่อแบ่งปันให้สมาชิกท่านอื่น
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                <i class="bi bi-clock-history me-3 text-info"></i> ก่อนปิดเทอมหรือช่วงสอบ มีบริการขยายเวลาเปิดทำการหรือไม่?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : ในช่วงสัปดาห์สอบ Learning Commons มักจะมีกิจกรรม "Open Late" ขยายเวลาให้บริการ สามารถติดตามประกาศได้ทางหน้าเพจของเรา
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                <i class="bi bi-cash-stack me-3 text-danger"></i> กรณีคืนหนังสือเกินกำหนด มีค่าปรับอย่างไร?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : มีค่าปรับเล่มละ 5 บาทต่อวัน
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                <i class="bi bi-hourglass-split me-3 text-success"></i> ถ้าเล่นบอร์ดเกมยังไม่จบ สามารถขอต่อเวลาได้หรือไม่?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : สามารถขอต่อเวลาได้อีก 1 ชั่วโมง ในกรณีที่ไม่มีคิวผู้ใช้งานอื่นรอต่ออยู่
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 mb-2 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                <i class="bi bi-calendar-x me-3 text-primary"></i> หากมาสายเกินกี่นาที การจองห้องประชุมถึงจะถูกยกเลิก?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : ระบบจะยกเลิกการจองโดยอัตโนมัติหากผู้ใช้บริการมายืนยันตัวตนช้ากว่า 15 นาที
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-question fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                <i class="bi bi-exclamation-octagon me-3 text-danger"></i> หากทำผิดนัดหรือจองแล้วไม่มาบ่อยๆ จะมีบทลงโทษอย่างไร?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#mainFaqAccordion">
+                            <div class="accordion-body faq-answer">
+                                ตอบ : หากผิดนัดสะสมครบ 3 ครั้ง สมาชิกจะถูกระงับสิทธิ์การใช้งาน (แบน) เป็นเวลา 7 วัน
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="feedback-heart-icon mb-3">
+                    <i class="bi bi-chat-heart fs-1 feedback-teal-text"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option rating-red">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-frown fs-1"></i>
+                                <span class="d-block small mt-1">ปรับปรุง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-yellow">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-neutral fs-1"></i>
+                                <span class="d-block small mt-1">ปานกลาง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-green">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-laughing fs-1"></i>
+                                <span class="d-block small mt-1">ดีเยี่ยม</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold shadow-sm submit-btn-custom" style="border-radius: 12px;">
+                        ส่งความคิดเห็น <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer py-6" style="background: #2b5484; border-top: 1px solid #dee2e6;">
+    <div class="container">
+        <div class="row g-4 align-items-center text-center text-md-start">
+            <div class="col-md-4">
+                <h5 class="col-12">Learning Commons</h5>
+                <p class="small opacity-75 " style="font-size: 0.75rem;">&copy; 2026 All Rights Reserved.</p>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <div class="d-inline-block px-3 py-2 bg-white shadow-sm rounded-pill border">
+                    <b class="text-black">🕒 เปิดบริการ : 08.00 - 20.00 น.</b>
+                </div>
+            </div>
+
+            <div class="col-md-4 text-md-end text-center">
+                <div class="mb-1">
+                    <i class="bi bi-telephone-fill me-1 text-white"></i>
+                    <b>โทร :</b> 012-345 6789
+                </div>
+                <div class="small">
+                    <i class="bi bi-envelope-fill me-1 text-white"></i>
+                    <b>Email :</b> Contact@learningcommons.com
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-center opacity-75" style="font-size: 0.90rem;">
+                ห้องสมุดยุคใหม่ เพื่อการเรียนรู้ที่ไร้ขีดจำกัด
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.addEventListener('scroll', function() {
+        const btn = document.querySelector('.floating-feedback-btn');
+        const footer = document.querySelector('.main-footer');
+        if (!footer || !btn) return;
+
+        const scrollPos = window.innerHeight + window.scrollY;
+        const footerTop = footer.offsetTop;
+
+        if (scrollPos >= footerTop) {
+            btn.style.position = 'absolute';
+            btn.style.top = (footerTop - btn.offsetHeight - 30) + 'px';
+            btn.style.bottom = 'auto';
+        } else {
+            btn.style.position = 'fixed';
+            btn.style.top = '';
+            btn.style.bottom = '30px';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        @font-face { font-family: 'PromptRegular'; src: url('PromptRegular.ttf') format('truetype'); }
+        * { font-family: 'PromptRegular' !important; font-weight: bold !important; }
+        body { background-color: #f0f7ff !important; }
+
+        .main-header { background: #2b5484; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .header-top { padding: 15px 40px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-logo-large { height: 85px; width: auto; margin-right: 25px; }
+        .learning-title { color: #ffffff; font-size: 2.2rem; margin: 0; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .navbar-custom { padding: 5px 30px !important; }
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important; font-size: 1.1rem; padding: 10px 18px !important;
+            margin: 5px; border: 1px solid transparent; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+            color: #ffffff !important; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); transform: translateY(-2px);
+        }
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px;
+            padding: 5px 15px; display: flex; align-items: center; color: white; transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover { background: rgba(255,255,255,0.2); }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+        .dropdown-menu { border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 10px; padding: 8px; overflow: hidden; }
+        .dropdown-item { border-radius: 10px; padding: 10px 15px; font-size: 0.95rem; transition: 0.2s; }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active { background-color: #f0f7ff; color: #2b5484 !important; }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="Index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-calendar-check me-1"></i> Reservation</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="Status.html"><i class="bi bi-info-circle me-1"></i> Status</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Dashboard.html"><i class="bi bi-graph-up me-1"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Contact.html"><i class="bi bi-telephone me-1"></i> Contact</a></li>
+                </ul>
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Popup Alert -->
+<div class="modal fade" id="popupAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" id="popupAlertClose" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-3 px-4">
+                <div class="mb-2"><i id="popupAlertIcon" class="bi bi-info-circle-fill fs-1"></i></div>
+                <p id="popupAlertMessage" class="mb-0 fs-5 fw-bold text-dark"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4 pt-0">
+                <button type="button" class="btn px-4" id="popupAlertOk" data-bs-dismiss="modal" style="border-radius: 50px; font-weight: bold; border:none;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showPopupAlert(message, redirect, color) {
+    var msgEl = document.getElementById('popupAlertMessage');
+    if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
+    var success = !!color;
+    var tone = success ? '#3B6540' : '#AB1C1C';
+    var iconEl = document.getElementById('popupAlertIcon');
+    if (iconEl) { iconEl.className = success ? 'bi bi-check-circle-fill fs-1' : 'bi bi-exclamation-circle-fill fs-1'; iconEl.style.color = tone; }
+    var okBtn = document.getElementById('popupAlertOk');
+    if (okBtn) { okBtn.style.backgroundColor = tone; okBtn.style.color = '#fff'; }
+    var modalEl = document.getElementById('popupAlertModal');
+    var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.addEventListener('hidden.bs.modal', function onHide() {
+        modalEl.removeEventListener('hidden.bs.modal', onHide);
+        if (redirect === 'back') { window.history.back(); }
+        else if (redirect === 'reload') { window.location.reload(); }
+        else if (redirect) { window.location.href = redirect; }
+    });
+    modalInstance.show();
+}
+</script>
+
+<style>
+    :root {
+        --color-primary: #2B5384; --color-secondary: #F0F7FF; --color-success: #3B6540;
+        --color-warning: #AB1C1C; --color-button1: #1257A5; --color-button2: #F4BC13;
+    }
+    .search-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .status-title { color: var(--color-primary); }
+    .status-input-wrap { position: relative; flex: 1 1 260px; }
+    .status-input-wrap .form-control { border-radius: 12px; border: 1px solid #dee2e6; }
+    .btn-status-search { background: var(--color-button1) !important; color: #fff !important; border: none; border-radius: 12px; font-weight: bold; padding: 10px 30px; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-status-search:hover { opacity: 0.9; color: #fff; }
+    #dateInput { max-width: 190px; flex: 0 0 auto; }
+    .cat-tab { border-radius: 12px; padding: 10px 10px; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.2s; border: 2px solid transparent; background: #fff; }
+    .cat-tab:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .cat-tab-book { color: var(--color-button2); border-color: var(--color-button2); }
+    .cat-tab-book:hover:not(.active) { background: rgba(244,188,19,0.12); }
+    .cat-tab-book.active { background: var(--color-button2); color: #fff; }
+    .cat-tab-boardgame { color: var(--color-success); border-color: var(--color-success); }
+    .cat-tab-boardgame:hover:not(.active) { background: rgba(59,101,64,0.12); }
+    .cat-tab-boardgame.active { background: var(--color-success); color: #fff; }
+    .cat-tab-room { color: var(--color-button1); border-color: var(--color-button1); }
+    .cat-tab-room:hover:not(.active) { background: rgba(18,87,165,0.12); }
+    .cat-tab-room.active { background: var(--color-button1); color: #fff; }
+    .status-card { background: #fff; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 20px 25px; margin-bottom: 18px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+    .status-icon-box { width: 78px; height: 78px; border-radius: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .status-icon-box i { font-size: 2.1rem; color: #fff; }
+    .status-card-body { flex: 1 1 300px; text-align: left; }
+    .status-card-title { font-size: 1.35rem; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
+    .status-card-sub { font-size: 0.95rem; color: #475569; margin-bottom: 4px; }
+    .status-card-dates span { margin-right: 22px; font-size: 0.9rem; }
+    .status-overdue-badge { display: inline-flex; align-items: center; margin-top: 6px; font-size: 0.85rem; font-weight: bold; color: #fff; background: var(--color-warning); border-radius: 50px; padding: 4px 14px; }
+    .status-actions { display: flex; gap: 24px; flex-shrink: 0; }
+    .btn-status-action { border: none; border-radius: 50px; padding: 10px 22px; font-weight: bold; color: #fff; transition: 0.2s; }
+    .btn-status-action:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-status-reserve { background: var(--color-success); }
+    .btn-status-extend { background: var(--color-button1); }
+    .btn-status-return { background: var(--color-warning); }
+    .custom-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 25px; list-style: none; padding: 0; }
+    .custom-pagination .page-box {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 0 8px;
+        border-radius: 10px; background: #ffffff; color: var(--color-primary); border: 1px solid #dee2e6; text-decoration: none; transition: 0.2s;
+    }
+    .custom-pagination .page-box:hover { background: var(--color-secondary); }
+    .custom-pagination .page-box.active { background: var(--color-primary); color: #ffffff; border-color: var(--color-primary); }
+    .custom-pagination .page-box.disabled { opacity: 0.4; pointer-events: none; }
+    .booking-modal-content { background-color: #fffef2 !important; border-radius: 20px !important; border: none !important; }
+    .booking-alert { background-color: #e0f7fa !important; color: #006064 !important; border: none !important; border-radius: 10px !important; }
+    .btn-booking-cancel { background-color: #f1f1f1 !important; color: #333 !important; border-radius: 50px !important; border: none !important; font-weight: bold; }
+    .btn-booking-confirm { background-color: var(--color-success) !important; color: white !important; border-radius: 50px !important; border: none !important; font-weight: bold; }
+    .btn-booking-confirm:disabled { background-color: #ccc !important; cursor: not-allowed; }
+    .empty-state { text-align: center; padding: 60px 0; color: #94a3b8; font-size: 1.1rem; }
+</style>
+
+<div class="container mt-4">
+    <div class="search-container mb-4">
+        <form id="searchForm" class="row align-items-center g-2">
+            <div class="col-md-2"><h3 class="m-0 status-title fw-bold">STATUS</h3></div>
+            <div class="col-md-10 d-flex gap-2 flex-wrap justify-content-end">
+                <div class="status-input-wrap">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search Book, Boardgame, Room">
+                </div>
+                <input type="date" name="date" id="dateInput" class="form-control">
+                <button type="submit" class="btn-status-search"><i class="bi bi-search"></i> Search</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row text-center mb-4 g-3">
+        <div class="col-md-4"><a href="#" id="tabBook" class="cat-tab cat-tab-book"><i class="bi bi-book fs-5"></i> Book</a></div>
+        <div class="col-md-4"><a href="#" id="tabBoardgame" class="cat-tab cat-tab-boardgame"><i class="bi bi-dice-5 fs-5"></i> Boardgame</a></div>
+        <div class="col-md-4"><a href="#" id="tabRoom" class="cat-tab cat-tab-room"><i class="bi bi-door-open fs-5"></i> Room</a></div>
+    </div>
+
+    <div id="statusList"><div class="empty-state"><i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>กำลังโหลดข้อมูล...</div></div>
+    <div id="statusPagination"></div>
+</div>
+
+<!-- Modal: จัดการการจอง (ต่อเวลา) -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-header border-0 pb-0"><h5 class="fw-bold">จัดการการจอง</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body p-4" id="modalBodyContent"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: ยืนยันการคืน -->
+<div class="modal fade" id="confirmReturnModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" style="color: var(--color-warning);">Comfirm Return</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center text-muted">Confirm Return</div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn px-4" id="btnConfirmReturnOk" style="border-radius: 50px; background: var(--color-warning); color: #fff; font-weight: bold;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: จองหนังสือ -->
+<div class="modal fade" id="bookReserveModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Confirm Book Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="bookReserveForm">
+          <div class="modal-body">
+            <div id="modalBookName" class="alert booking-alert py-2 fw-bold" style="border-radius: 10px;"></div>
+            <input type="hidden" id="modalBookID">
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="reserveBookMemberID" class="form-control" placeholder="Input MemberID......" required style="border-radius: 10px;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Return Date (Within 7 days)</label>
+                <input type="date" id="returnDatePicker" class="form-control" required style="border-radius: 10px;">
+            </div>
+            <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="acceptTermsBook">
+                <label class="form-check-label small" for="acceptTermsBook">I accept to keep the book in good condition and will be responsible for any damages.</label>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-booking-cancel px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-booking-confirm px-4" id="btnConfirmBookBooking" disabled>Confirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: จองบอร์ดเกม -->
+<div class="modal fade" id="boardgameReserveModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Confirm Game Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="boardgameReserveForm">
+          <div class="modal-body">
+            <input type="hidden" id="modalGameID">
+            <div id="modalGameName" class="alert booking-alert py-2 fw-bold" style="border-radius: 12px;"></div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="reserveGameMemberID" class="form-control" placeholder="Input MemberID..." required style="border-radius: 12px;">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="small fw-bold">Start Time</label>
+                    <input type="time" id="GameStartTime" class="form-control" min="08:00" max="19:59" required onchange="calcGameEndTime()" style="border-radius: 12px;">
+                </div>
+                <div class="col-6">
+                    <label class="small fw-bold">End Time (2 hours limit)</label>
+                    <input type="time" id="GameEndTime" class="form-control" readonly style="border-radius: 12px; background-color: #f8f9fa;">
+                </div>
+            </div>
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" id="acceptTermsGame">
+                <label class="form-check-label small" for="acceptTermsGame">I agree to inspect the equipment before playing and will be responsible for any damages.</label>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 50px;">Cancel</button>
+            <button type="submit" class="btn btn-success px-4" id="btnConfirmGameBooking" disabled style="border-radius: 50px; font-weight: bold;">Comfirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: จองห้องประชุม -->
+<div class="modal fade" id="roomReserveModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0 px-4 pt-4">
+        <h5 class="modal-title fw-bold">Confirm Room Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="roomReserveForm">
+          <div class="modal-body p-4">
+            <input type="hidden" id="bookRID">
+            <div id="bookRName" class="alert booking-alert mb-4"></div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="reserveRoomMemberID" class="form-control" placeholder="Input MemberID..." required style="border-radius: 12px;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Booking Date</label>
+                <select id="roomBookingDate" class="form-select" style="border-radius: 12px;">
+                    <option id="optToday">Today</option>
+                    <option id="optTomorrow">Tomorrow</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="small fw-bold">Start Time (08:00-20:00)</label>
+                    <input type="time" id="RoomStartTime" class="form-control" min="08:00" max="19:59" required onchange="calcRoomEndTime()" style="border-radius: 12px;">
+                </div>
+                <div class="col-6">
+                    <label class="small fw-bold">End Time (3 hours limit)</label>
+                    <input type="time" id="RoomEndTime" class="form-control" readonly style="border-radius: 12px; background-color: #f8f9fa;">
+                </div>
+            </div>
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" id="confirmRulesRoom" onchange="toggleRoomSubmitBtn()">
+                <label class="form-check-label small" for="confirmRulesRoom">I agree to inspect the room before using and will be responsible for any damages.</label>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 50px;">Cancel</button>
+            <button type="submit" id="btnConfirmRoomBooking" class="btn btn-success px-4" style="border-radius: 50px; font-weight: bold;" disabled>Comfirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="bg-warning bg-opacity-10 p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-chat-heart fs-1 text-warning"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center"><i class="bi bi-emoji-frown fs-1"></i><span class="d-block small mt-1">ปรับปรุง</span></div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center"><i class="bi bi-emoji-neutral fs-1"></i><span class="d-block small mt-1">ปานกลาง</span></div>
+                        </label>
+                        <label class="rating-option">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center"><i class="bi bi-emoji-laughing fs-1"></i><span class="d-block small mt-1">ดีเยี่ยม</span></div>
+                        </label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm" style="border-radius: 12px;">ส่งความคิดเห็น <i class="bi bi-send ms-2"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .floating-feedback-btn { position: fixed; bottom: 30px; right: 30px; z-index: 9999; padding: 12px 25px; border-radius: 50px; border: 2px solid #fff; transition: all 0.3s ease; display: flex; align-items: center; }
+    .floating-feedback-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important; }
+    .rating-option { cursor: pointer; }
+    .rating-box { color: #ccc; transition: all 0.2s; }
+    .rating-box:hover { color: #666; transform: scale(1.1); }
+    .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+    .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+    .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+    .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #ffc107; }
+    .main-footer { background: #2b5484; color: white; padding: 25px 0; border-top: 3px solid rgba(255,255,255,0.1); width: 100%; }
+    .footer-contact-pill { background: rgba(255,255,255,0.15); padding: 10px 25px; border-radius: 50px; display: inline-block; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.2); }
+    body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+    main, .container { flex: 1; }
+</style>
+
+<footer class="main-footer">
+    <div class="container text-center">
+        <div class="footer-contact-pill">📞 ติดต่อ โทร 012-345 6789</div>
+        <div class="mt-2 opacity-50 small">&copy; 2026 Learning Commons. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://wzjbaxnrppvfrnncttne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const PER_PAGE = 10;
+const catColors = {
+    book:      { bg: '#F4BC13', icon: 'bi-book-fill',      status: 'กำลังใช้งาน' },
+    boardgame: { bg: '#3B6540', icon: 'bi-dice-5-fill',    status: 'กำลังเล่น' },
+    room:      { bg: '#1257A5', icon: 'bi-door-open-fill', status: 'กำลังใช้งาน' },
+};
+let currentData = null;
+let pendingReturnId = null;
+
+// ---------- ตัวช่วยเรื่องวันที่ (ฐานข้อมูลใช้ d-m-Y ทั้งหมดหลังจากทำความสะอาดแล้ว) ----------
+function toDMY(d) { return String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear(); }
+function parseDMY(s) {
+    if (!s) return null;
+    const [d, m, y] = s.split('-').map(Number);
+    if (!d || !m || !y) return null;
+    return new Date(y, m - 1, d);
+}
+function isoToDMY(iso) { // ใช้ตอนแปลงค่าจาก <input type="date"> (Y-m-d) เป็น d-m-Y
+    const [y, m, d] = iso.split('-');
+    return `${d}-${m}-${y}`;
+}
+
+// ---------- state จาก URL (?type=&date=&search=&page=) ----------
+function getState() {
+    const p = new URLSearchParams(window.location.search);
+    return { type: p.get('type') || '', date: p.get('date') || '', search: p.get('search') || '', page: parseInt(p.get('page') || '1', 10) || 1 };
+}
+function pushState(type, date, search, page) {
+    const p = new URLSearchParams();
+    if (type) p.set('type', type);
+    if (date) p.set('date', date);
+    if (search) p.set('search', search);
+    if (page && page > 1) p.set('page', page);
+    window.location.href = 'Status.html' + (p.toString() ? '?' + p.toString() : '');
+}
+
+async function fetchMerged(type, dateISO) {
+    const tableMap = { book: 'book', boardgame: 'boardgame', room: 'room' };
+    const idFieldMap = { book: 'BookID', boardgame: 'BoardgameID', room: 'RoomID' };
+    const table = tableMap[type], idField = idFieldMap[type], status = catColors[type].status;
+
+    const { data: items } = await supabase.from(table).select('*').order('Name', { ascending: true });
+    const { data: bookings } = await supabase.from('booking').select('*').eq('Status', status);
+    const bookingMap = {};
+    (bookings || []).forEach(b => { bookingMap[b.BookID] = b; });
+
+    const dateFilter = dateISO ? isoToDMY(dateISO) : '';
+    let merged = (items || []).map(it => {
+        const id = it[idField];
+        return { ItemID: id, ItemName: it.Name, booking: bookingMap[id] || null };
+    });
+
+    if (dateFilter) {
+        merged = merged.filter(r => r.booking && r.booking.BookingDate === dateFilter);
+    }
+    return merged;
+}
+
+async function applySearchAndCount(merged, type, search) {
+    if (!search) return merged;
+    const s = search.toLowerCase();
+    return merged.filter(r => r.ItemName.toLowerCase().includes(s) || (r.booking && String(r.booking.MemberID).toLowerCase().includes(s)));
+}
+
+function sortMerged(merged) {
+    return merged.slice().sort((a, b) => {
+        const aBooked = !!a.booking, bBooked = !!b.booking;
+        if (aBooked !== bBooked) return aBooked ? -1 : 1;
+        if (aBooked && bBooked) return b.booking.BookingID.localeCompare(a.booking.BookingID);
+        return a.ItemName.localeCompare(b.ItemName);
+    });
+}
+
+// ---------------------------------------------------------
+// ตัวควบคุมหลัก
+// ---------------------------------------------------------
+async function render() {
+    let { type, date, search, page } = getState();
+    document.getElementById('searchInput').value = search;
+    document.getElementById('dateInput').value = date;
+    document.getElementById('dateInput').max = new Date().toISOString().split('T')[0];
+
+    // เดาหมวดหมู่จากคำค้นหา ถ้ายังไม่ได้เลือกแท็บ
+    if (!type && search) {
+        for (const t of ['book', 'boardgame', 'room']) {
+            const table = { book: 'book', boardgame: 'boardgame', room: 'room' }[t];
+            const { count } = await supabase.from(table).select('*', { count: 'exact', head: true }).ilike('Name', `%${search}%`);
+            if ((count || 0) > 0) { type = t; break; }
+        }
+        if (!type) type = 'book';
+    }
+    // เดาหมวดหมู่จากวันที่ ถ้ายังไม่ได้เลือกแท็บและไม่ได้ค้นหา
+    if (!type && !search && date) {
+        for (const t of ['book', 'boardgame', 'room']) {
+            const merged = await fetchMerged(t, date);
+            if (merged.length > 0) { type = t; break; }
+        }
+    }
+    if (!type) type = ''; // ยังไม่เลือกอะไรเลย -> ไม่แสดงรายการ (เหมือนเดิม)
+
+    document.querySelectorAll('.cat-tab').forEach(el => el.classList.remove('active'));
+    if (type) document.getElementById('tab' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+
+    document.querySelectorAll('.cat-tab').forEach(el => {
+        const t = el.id.replace('tab', '').toLowerCase();
+        el.onclick = (e) => { e.preventDefault(); pushState(t, date, search, 1); };
+    });
+
+    document.getElementById('searchForm').onsubmit = (e) => {
+        e.preventDefault();
+        pushState(type, document.getElementById('dateInput').value, document.getElementById('searchInput').value.trim(), 1);
+    };
+
+    const listEl = document.getElementById('statusList');
+    const pagEl = document.getElementById('statusPagination');
+    if (!type) { listEl.innerHTML = ''; pagEl.innerHTML = ''; return; }
+
+    let merged = await fetchMerged(type, date);
+    merged = await applySearchAndCount(merged, type, search);
+    merged = sortMerged(merged);
+
+    const totalItems = merged.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / PER_PAGE));
+    if (page > totalPages) page = totalPages;
+    const pageRows = merged.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    if (pageRows.length === 0) {
+        listEl.innerHTML = `<div class="empty-state"><i class="bi bi-inbox fs-1 d-block mb-2"></i>No results found</div>`;
+        pagEl.innerHTML = '';
+        return;
+    }
+
+    const c = catColors[type];
+    const now = new Date();
+
+    listEl.innerHTML = pageRows.map(row => {
+        const isBooked = !!row.booking;
+        let canEdit = false, isOverdue = false;
+        if (isBooked) {
+            if (type === 'book') {
+                const d1 = parseDMY(row.booking.BookingDate), d2 = parseDMY(row.booking.DueDate);
+                canEdit = d1 && d2 ? Math.round((d2 - d1) / 86400000) <= 7 : true;
+                isOverdue = d2 ? d2 < parseDMY(toDMY(now)) : false;
+            } else {
+                const [sh, sm] = row.booking.StartTime.split(':').map(Number);
+                const [eh, em] = row.booking.EndTime.split(':').map(Number);
+                const diffMin = (eh * 60 + em) - (sh * 60 + sm);
+                const limitMin = (type === 'boardgame') ? 180 : 240;
+                canEdit = diffMin <= (limitMin - 60);
+                const bDate = parseDMY(row.booking.BookingDate);
+                if (bDate) { bDate.setHours(eh, em, 0, 0); isOverdue = bDate < now; }
+            }
+        }
+
+        let bodyHTML = '';
+        if (isBooked) {
+            if (type === 'book') {
+                bodyHTML = `
+                <div class="status-card-sub">MemberID : ${row.booking.MemberID}</div>
+                <div class="status-card-dates">
+                    <span style="color: var(--color-button1);">วันที่ยืม ${row.booking.BookingDate}</span>
+                    <span style="color: var(--color-warning);">กำหนดวันคืน ${row.booking.DueDate}</span>
+                </div>`;
+            } else {
+                bodyHTML = `
+                <div class="status-card-sub">MemberID : ${row.booking.MemberID} &nbsp;|&nbsp; วันที่ยืม ${row.booking.BookingDate}</div>
+                <div class="status-card-dates">
+                    <span style="color: var(--color-button1);">เวลาเริ่ม ${row.booking.StartTime} น.</span>
+                    <span style="color: var(--color-warning);">เวลาสิ้นสุด ${row.booking.EndTime} น.</span>
+                </div>`;
+            }
+            if (isOverdue) bodyHTML += `<div class="status-overdue-badge"><i class="bi bi-exclamation-triangle-fill me-1"></i>เลยกำหนดคืนของ</div>`;
+        } else {
+            bodyHTML = `<div class="status-card-sub">สถานะ : ว่าง</div>`;
+        }
+
+        let actionsHTML = '';
+        if (isBooked) {
+            actionsHTML = (!isOverdue ? `<button class="btn-status-action btn-status-extend" ${!canEdit ? 'disabled' : ''} onclick='openEditModal("${type}", ${JSON.stringify(row.booking)})'>Extend</button>` : '')
+                + `<button class="btn-status-action btn-status-return" onclick="askReturn('${row.booking.BookingID}')">Return</button>`;
+        } else {
+            const nameEsc = String(row.ItemName).replace(/'/g, "\\'");
+            if (type === 'book') actionsHTML = `<button class="btn-status-action btn-status-reserve" onclick="openBookReserveModal('${row.ItemID}', '${nameEsc}')">Reserve</button>`;
+            else if (type === 'boardgame') actionsHTML = `<button class="btn-status-action btn-status-reserve" onclick="openBoardgameReserveModal('${row.ItemID}', '${nameEsc}')">Reserve</button>`;
+            else actionsHTML = `<button class="btn-status-action btn-status-reserve" onclick="openRoomReserveModal('${row.ItemID}', '${nameEsc}')">Reserve</button>`;
+        }
+
+        return `
+        <div class="status-card">
+            <div class="status-icon-box" style="background: ${c.bg};"><i class="bi ${c.icon}"></i></div>
+            <div class="status-card-body">
+                <div class="status-card-title">${row.ItemID} : ${row.ItemName}</div>
+                ${bodyHTML}
+            </div>
+            <div class="status-actions">${actionsHTML}</div>
+        </div>`;
+    }).join('');
+
+    if (totalPages > 1) {
+        const qs = (p) => { const u = new URLSearchParams(); if (type) u.set('type', type); if (date) u.set('date', date); if (search) u.set('search', search); u.set('page', p); return '?' + u.toString(); };
+        const maxVisible = 5;
+        let start = Math.max(1, page - Math.floor(maxVisible / 2));
+        let end = Math.min(totalPages, start + maxVisible - 1);
+        if (end - start + 1 < maxVisible) { start = Math.max(1, end - maxVisible + 1); }
+
+        let pages = '';
+        if (start > 1) {
+            pages += `<li><a class="page-box" href="${qs(1)}">1</a></li>`;
+            if (start > 2) pages += `<li><span class="page-box disabled">...</span></li>`;
+        }
+        for (let i = start; i <= end; i++) pages += `<li><a class="page-box ${i === page ? 'active' : ''}" href="${qs(i)}">${i}</a></li>`;
+        if (end < totalPages) {
+            if (end < totalPages - 1) pages += `<li><span class="page-box disabled">...</span></li>`;
+            pages += `<li><a class="page-box" href="${qs(totalPages)}">${totalPages}</a></li>`;
+        }
+
+        pagEl.innerHTML = `
+        <ul class="custom-pagination">
+            <li><a class="page-box ${page <= 1 ? 'disabled' : ''}" href="${qs(Math.max(1, page - 1))}">&lt;</a></li>
+            ${pages}
+            <li><a class="page-box ${page >= totalPages ? 'disabled' : ''}" href="${qs(Math.min(totalPages, page + 1))}">&gt;</a></li>
+        </ul>`;
+    } else {
+        pagEl.innerHTML = '';
+    }
+}
+
+// ---------------------------------------------------------
+// ต่อเวลา / คืน
+// ---------------------------------------------------------
+const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+window.openEditModal = function (type, data) {
+    currentData = data;
+    let content = "";
+    if (type === 'book') {
+        content = `
+            <p><b>วันที่ยืม:</b> ${data.BookingDate}</p>
+            <p><b>กำหนดคืนปัจจุบัน:</b> ${data.DueDate}</p>
+            <hr><p class="fw-bold text-center">ต้องการยืมต่อ ใช่หรือไม่?</p>
+            <p class="text-muted small text-center">* ยืมต่อได้ 1 ครั้ง (7 วัน) เท่านั้น</p>
+            <button class="btn btn-primary w-100 py-2 fw-bold" onclick="extendAction('book')">Yes, Extend</button>`;
+    } else {
+        let limitText = (type === 'boardgame') ? '3 ชั่วโมง' : '4 ชั่วโมง';
+        content = `
+            <p><b>วันที่จอง:</b> ${data.BookingDate}</p>
+            <p><b>เวลาเริ่ม:</b> ${data.StartTime} น.</p>
+            <p><b>เวลาสิ้นสุดปัจจุบัน:</b> ${data.EndTime} น.</p>
+            <hr><p class="fw-bold text-center">ต้องการขยายเวลา ใช่หรือไม่?</p>
+            <p class="text-muted small text-center">* ขยายได้ 1 ชม. (รวมไม่เกิน ${limitText})</p>
+            <button class="btn btn-success w-100 py-2 fw-bold" onclick="extendAction('time')">Confirm Extend</button>`;
+    }
+    document.getElementById('modalBodyContent').innerHTML = content;
+    editModal.show();
+};
+
+window.extendAction = async function (actionType) {
+    if (actionType === 'book') {
+        const d = parseDMY(currentData.DueDate);
+        d.setDate(d.getDate() + 7);
+        const newDate = toDMY(d);
+        const { error } = await supabase.from('booking').update({ DueDate: newDate }).eq('BookingID', currentData.BookingID);
+        editModal.hide();
+        if (error) { showPopupAlert('Sorry, something went wrong. Please try again.', null); return; }
+        showPopupAlert(`Great! You can keep the book until ${newDate}. (You can only extend once.)`, 'reload');
+    } else {
+        const [h, m] = currentData.EndTime.split(':').map(Number);
+        let total = h * 60 + m + 60;
+        const newEnd = String(Math.floor(total / 60) % 24).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+        const { error } = await supabase.from('booking').update({ EndTime: newEnd }).eq('BookingID', currentData.BookingID);
+        editModal.hide();
+        if (error) { showPopupAlert('Sorry, something went wrong. Please try again.', null); return; }
+        showPopupAlert('Great! Your time has been extended. (You can only extend once.)', 'reload');
+    }
+};
+
+window.askReturn = function (id) {
+    pendingReturnId = id;
+    new bootstrap.Modal(document.getElementById('confirmReturnModal')).show();
+};
+document.getElementById('btnConfirmReturnOk').addEventListener('click', async function () {
+    if (!pendingReturnId) return;
+    await supabase.from('booking').update({ Status: 'คืนแล้ว' }).eq('BookingID', pendingReturnId);
+    window.location.reload();
+});
+
+// ---------------------------------------------------------
+// จองหนังสือ / บอร์ดเกม / ห้องประชุม (เหมือนหน้า Book/Boardgame/Room เป๊ะ แต่ redirect กลับ Status.html)
+// ---------------------------------------------------------
+window.openBookReserveModal = function (id, name) {
+    document.getElementById('modalBookID').value = id;
+    document.getElementById('modalBookName').innerHTML = "Choose : " + name;
+    document.getElementById('acceptTermsBook').checked = false;
+    document.getElementById('btnConfirmBookBooking').disabled = true;
+    const today = new Date();
+    const minDate = new Date(today); minDate.setDate(today.getDate() + 1);
+    const maxDate = new Date(today); maxDate.setDate(today.getDate() + 7);
+    const picker = document.getElementById('returnDatePicker');
+    picker.min = minDate.toISOString().split('T')[0];
+    picker.max = maxDate.toISOString().split('T')[0];
+    picker.value = minDate.toISOString().split('T')[0];
+    new bootstrap.Modal(document.getElementById('bookReserveModal')).show();
+};
+document.getElementById('acceptTermsBook').addEventListener('change', function () { document.getElementById('btnConfirmBookBooking').disabled = !this.checked; });
+
+document.getElementById('bookReserveForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const BookID = document.getElementById('modalBookID').value;
+    const MemberID = document.getElementById('reserveBookMemberID').value.trim();
+    const ReturnDate = document.getElementById('returnDatePicker').value;
+    const BookingDate = toDMY(new Date());
+    const DueDate = isoToDMY(ReturnDate);
+
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) { bootstrap.Modal.getInstance(document.getElementById('bookReserveModal')).hide(); showPopupAlert('We can not find that member ID. Please check and try again.', 'back'); return; }
+
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true }).eq('MemberID', MemberID).eq('Status', 'กำลังใช้งาน');
+    if ((count || 0) >= 3) { bootstrap.Modal.getInstance(document.getElementById('bookReserveModal')).hide(); showPopupAlert('Sorry, you already have 3 books. Please return one before borrowing more.', 'Status.html?type=book'); return; }
+
+    const { data: lastRows } = await supabase.from('booking').select('BookingID').order('BookingID', { ascending: false }).limit(1);
+    const BookingID = (lastRows && lastRows.length > 0) ? 'BK' + String(parseInt(lastRows[0].BookingID.substring(2), 10) + 1).padStart(3, '0') : 'BK001';
+
+    const { error } = await supabase.from('booking').insert({ BookingID, MemberID, BookID, BookingDate, DueDate, Status: 'กำลังใช้งาน' });
+    bootstrap.Modal.getInstance(document.getElementById('bookReserveModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+    showPopupAlert('Booked Complete', 'Status.html?type=book', '#3B6540');
+});
+
+window.openBoardgameReserveModal = function (id, name) {
+    document.getElementById('modalGameID').value = id;
+    document.getElementById('modalGameName').innerHTML = "Choose : " + name;
+    document.getElementById('acceptTermsGame').checked = false;
+    document.getElementById('btnConfirmGameBooking').disabled = true;
+    new bootstrap.Modal(document.getElementById('boardgameReserveModal')).show();
+};
+document.getElementById('acceptTermsGame').addEventListener('change', function () { document.getElementById('btnConfirmGameBooking').disabled = !this.checked; });
+window.calcGameEndTime = function () {
+    const start = document.getElementById('GameStartTime').value;
+    if (start) {
+        let [h, m] = start.split(':').map(Number);
+        let eh = h + 2;
+        if (eh > 20 || (eh === 20 && m > 0)) { eh = 20; m = 0; } // ห้องสมุดปิด 20.00 น.
+        document.getElementById('GameEndTime').value = String(eh).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+};
+
+document.getElementById('boardgameReserveForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const BoardgameID = document.getElementById('modalGameID').value;
+    const MemberID = document.getElementById('reserveGameMemberID').value.trim();
+    const StartTime = document.getElementById('GameStartTime').value;
+    const EndTime = document.getElementById('GameEndTime').value;
+    const DateToday = toDMY(new Date());
+
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) { bootstrap.Modal.getInstance(document.getElementById('boardgameReserveModal')).hide(); showPopupAlert('We can not find that member ID. Please check and try again.', 'back'); return; }
+
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true }).eq('MemberID', MemberID).eq('Status', 'กำลังเล่น');
+    if ((count || 0) >= 1) { bootstrap.Modal.getInstance(document.getElementById('boardgameReserveModal')).hide(); showPopupAlert('Sorry, you can only borrow 1 boardgame at a time.', 'Status.html?type=boardgame'); return; }
+
+    const { data: lastRows } = await supabase.from('booking').select('BookingID').order('BookingID', { ascending: false }).limit(1);
+    const BookingID = (lastRows && lastRows.length > 0) ? 'BK' + String(parseInt(lastRows[0].BookingID.substring(2), 10) + 1).padStart(3, '0') : 'BK001';
+
+    const { error } = await supabase.from('booking').insert({ BookingID, MemberID, BookID: BoardgameID, BookingDate: DateToday, StartTime, EndTime, Status: 'กำลังเล่น' });
+    bootstrap.Modal.getInstance(document.getElementById('boardgameReserveModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+    showPopupAlert('Booked Complete', 'Status.html?type=boardgame', '#3B6540');
+});
+
+window.openRoomReserveModal = function (id, name) {
+    document.getElementById('bookRID').value = id;
+    document.getElementById('bookRName').innerText = name;
+    document.getElementById('confirmRulesRoom').checked = false;
+    document.getElementById('btnConfirmRoomBooking').disabled = true;
+    const today = new Date(); const tomorrow = new Date(today.getTime() + 86400000);
+    const fmtTH = d => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    document.getElementById('optToday').value = toDMY(today);
+    document.getElementById('optToday').textContent = `Today (${fmtTH(today)})`;
+    document.getElementById('optTomorrow').value = toDMY(tomorrow);
+    document.getElementById('optTomorrow').textContent = `Tomorrow (${fmtTH(tomorrow)})`;
+    new bootstrap.Modal(document.getElementById('roomReserveModal')).show();
+};
+window.toggleRoomSubmitBtn = function () { document.getElementById('btnConfirmRoomBooking').disabled = !document.getElementById('confirmRulesRoom').checked; };
+window.calcRoomEndTime = function () {
+    const start = document.getElementById('RoomStartTime').value;
+    if (start) {
+        let [h, m] = start.split(':').map(Number);
+        let eh = h + 3;
+        if (eh > 20 || (eh === 20 && m > 0)) { eh = 20; m = 0; } // ห้องสมุดปิด 20.00 น.
+        document.getElementById('RoomEndTime').value = String(eh).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+};
+
+document.getElementById('roomReserveForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const RoomID = document.getElementById('bookRID').value;
+    const MemberID = document.getElementById('reserveRoomMemberID').value.trim();
+    const StartTime = document.getElementById('RoomStartTime').value;
+    const EndTime = document.getElementById('RoomEndTime').value;
+    const BookingDate = document.getElementById('roomBookingDate').value;
+
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) { bootstrap.Modal.getInstance(document.getElementById('roomReserveModal')).hide(); showPopupAlert('We can not find that member ID. Please check and try again.', 'back'); return; }
+
+    const { data: lastRows } = await supabase.from('booking').select('BookingID').order('BookingID', { ascending: false }).limit(1);
+    const BookingID = (lastRows && lastRows.length > 0) ? 'BK' + String(parseInt(lastRows[0].BookingID.substring(2), 10) + 1).padStart(3, '0') : 'BK001';
+
+    const { error } = await supabase.from('booking').insert({ BookingID, MemberID, BookID: RoomID, BookingDate, StartTime, EndTime, Status: 'กำลังใช้งาน' });
+    bootstrap.Modal.getInstance(document.getElementById('roomReserveModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+    showPopupAlert('Booked Complete', 'Status.html?type=room', '#3B6540');
+});
+
+// Floating feedback button
+window.addEventListener('scroll', function () {
+    const btn = document.querySelector('.floating-feedback-btn');
+    const footer = document.querySelector('.main-footer');
+    if (!footer || !btn) return;
+    const scrollPos = window.innerHeight + window.scrollY;
+    const footerTop = footer.offsetTop;
+    if (scrollPos >= footerTop) { btn.style.position = 'absolute'; btn.style.top = (footerTop - btn.offsetHeight - 30) + 'px'; btn.style.bottom = 'auto'; }
+    else { btn.style.position = 'fixed'; btn.style.top = ''; btn.style.bottom = '30px'; }
+});
+
+render();
+</script>
+</body>
+</html>

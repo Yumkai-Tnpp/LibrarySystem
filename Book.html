@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        @font-face {
+            font-family: 'PromptRegular';
+            src: url('PromptRegular.ttf') format('truetype');
+        }
+        * {
+            font-family: 'PromptRegular' !important;
+            font-weight: bold !important;
+        }
+        body { background-color: #f0f7ff !important; }
+
+        .main-header { background: #2b5484; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .header-top { padding: 15px 40px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-logo-large { height: 85px; width: auto; margin-right: 25px; }
+        .learning-title { color: #ffffff; font-size: 2.2rem; margin: 0; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .navbar-custom { padding: 5px 30px !important; }
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.7) !important; font-size: 1.1rem; padding: 10px 18px !important;
+            margin: 5px; border: 1px solid transparent; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+            color: #ffffff !important; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); transform: translateY(-2px);
+        }
+        .admin-dropdown .btn-admin {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px;
+            padding: 5px 15px; display: flex; align-items: center; color: white; transition: 0.3s;
+        }
+        .admin-dropdown .btn-admin:hover { background: rgba(255,255,255,0.2); }
+        .admin-dropdown .dropdown-toggle::after { display: none; }
+        .dropdown-menu { border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 10px; padding: 8px; overflow: hidden; }
+        .dropdown-item { border-radius: 10px; padding: 10px 15px; font-size: 0.95rem; transition: 0.2s; }
+        .dropdown-item i { margin-right: 10px; color: #2b5484; }
+        .dropdown-item:hover, .dropdown-item.active { background-color: #f0f7ff; color: #2b5484 !important; }
+        .dropdown-item.active { font-weight: bold; }
+        .text-danger:hover { background-color: #fff1f0 !important; }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header sticky-top">
+    <div class="header-top d-none d-lg-flex">
+        <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
+        <h1 class="learning-title">Learning Commons</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Index.html"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calendar-check me-1"></i> Reservation
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Boardgame.html">Boardgames</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item active" href="Book.html">Books</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="Room.html">Rooms</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Status.html"><i class="bi bi-info-circle me-1"></i> Status</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Dashboard.html"><i class="bi bi-graph-up me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Contact.html"><i class="bi bi-telephone me-1"></i> Contact</a>
+                    </li>
+                </ul>
+
+                <div class="dropdown admin-dropdown">
+                    <button class="btn btn-admin dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="me-3 fw-bold d-none d-sm-inline">Admin</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
+                             alt="Profile" width="38" height="38" class="rounded-circle border border-2 border-success">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="Profile.html"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="Settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Popup Alert (replaces old browser alert() pop-ups) -->
+<div class="modal fade" id="popupAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" id="popupAlertClose" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-3 px-4">
+                <div class="mb-2"><i id="popupAlertIcon" class="bi bi-info-circle-fill fs-1"></i></div>
+                <p id="popupAlertMessage" class="mb-0 fs-5 fw-bold text-dark"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4 pt-0">
+                <button type="button" class="btn px-4" id="popupAlertOk" data-bs-dismiss="modal" style="border-radius: 50px; font-weight: bold; border:none;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showPopupAlert(message, redirect, color) {
+    var msgEl = document.getElementById('popupAlertMessage');
+    if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
+    var success = !!color;
+    var tone = success ? '#3B6540' : '#AB1C1C';
+    var iconEl = document.getElementById('popupAlertIcon');
+    if (iconEl) { iconEl.className = success ? 'bi bi-check-circle-fill fs-1' : 'bi bi-exclamation-circle-fill fs-1'; iconEl.style.color = tone; }
+    var okBtn = document.getElementById('popupAlertOk');
+    if (okBtn) { okBtn.style.backgroundColor = tone; okBtn.style.color = '#fff'; }
+    var modalEl = document.getElementById('popupAlertModal');
+    var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.addEventListener('hidden.bs.modal', function onHide() {
+        modalEl.removeEventListener('hidden.bs.modal', onHide);
+        if (redirect === 'back') { window.history.back(); }
+        else if (redirect) { window.location.href = redirect; }
+    });
+    modalInstance.show();
+}
+</script>
+
+<style>
+    .main-content-wrapper { margin-bottom: 100px; }
+    .search-wrapper { max-width: 700px; margin: 0 auto 40px auto; }
+    .search-group { display: flex; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .search-input { border: none; flex: 1; padding: 10px 25px; border-radius: 50px 0 0 50px; outline: none; font-size: 1rem; }
+    .search-btn { background: #ffca29; color: black; border: none; padding: 10px 30px; border-radius: 50px; transition: 0.3s; font-weight: bold; }
+    .search-btn:hover { background: #ffc107; color: black; }
+    .card-add-category { border: 2px dashed #cbd5e0 !important; background: #f8f9fa; cursor: pointer; min-height: 230px; border-radius: 20px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+    .card-add-category:hover { border-color: #28a745 !important; background: #f4fff8; transform: translateY(-5px); }
+    .card-add-category i { color: #cbd5e0; font-size: 3.5rem; }
+    .card-add-category:hover i { color: #28a745; }
+    .add-text { color: #718096; font-weight: bold; margin-top: 10px; }
+    .row-add-book td {color: #000000 !important; transition: 0.3s;}
+    .row-add-book:hover td {color: #198754 !important;}
+    .badge-cat { font-size: 0.75rem; padding: 5px 10px; border-radius: 50px; }
+    .booking-modal-content { background-color: #fffef2 !important; border-radius: 20px !important; border: none !important; }
+    .booking-alert { background-color: #e0f7fa !important; color: #006064 !important; border: none !important; border-radius: 10px !important; }
+    .btn-booking-cancel { background-color: #f1f1f1 !important; color: #333 !important; border-radius: 50px !important; border: none !important; font-weight: bold; }
+    .btn-booking-confirm { background-color: #0d7a4d !important; color: white !important; border-radius: 50px !important; border: none !important; font-weight: bold; }
+    .btn-booking-confirm:disabled { background-color: #ccc !important; cursor: not-allowed; }
+    #bookTable thead tr th {text-align: center;}
+    #bookTable tbody tr td {text-align: center; vertical-align: middle; padding-top: 14px; padding-bottom: 14px;}
+    #bookTable tbody tr td:nth-child(2) {text-align: left !important; padding-left: 20px;}
+    #bookTable tbody tr.row-add-book td {text-align: center !important;}
+    #bookTable td.book-icon-col { padding: 1%; }
+    #bookTable td.book-icon-col i { font-size: 28px; }
+    .btn-info-icon { background: none; border: none; padding: 0; color: #17a2b8; font-size: 1.4rem; line-height: 1; }
+    .btn-info-icon:hover { color: #117a8b; }
+    .book-detail-row td { border-top: none; }
+    .edit-field-form .field-input { display: inline-block; }
+    .edit-toggle-btn { line-height: 1; }
+    .detail-divider { width: 90%; margin: 20px auto; }
+    .cat-options-btn {
+        position: absolute; top: 8px; right: 8px; z-index: 5;
+        width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.9);
+    }
+    .custom-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; list-style: none; padding: 0; }
+    .custom-pagination .page-box {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 38px; height: 38px; padding: 0 8px;
+        border-radius: 10px; background: #ffffff; color: #2b5484;
+        border: 1px solid #dee2e6; text-decoration: none; transition: 0.2s;
+    }
+    .custom-pagination .page-box:hover { background: #eef4fb; }
+    .custom-pagination .page-box.active { background: #2b5484; color: #ffffff; border-color: #2b5484; }
+    .custom-pagination .page-box.disabled { opacity: 0.4; pointer-events: none; }
+
+    /* สไตล์ปุ่มลอย (Floating Feedback Button) - สีเหลือง Warning */
+    .floating-feedback-btn {
+        position: fixed; bottom: 30px; right: 30px; z-index: 9999; padding: 12px 25px; border-radius: 50px;
+        border: 2px solid #fff; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; align-items: center;
+        background-color: #ffc107 !important; color: #000 !important;
+    }
+    .floating-feedback-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important; }
+    .submit-btn-custom { background-color: #343a40 !important; border: none; color: #fff !important; }
+    .submit-btn-custom:hover { background-color: #23272b !important; }
+    .feedback-heart-icon { background: none !important; box-shadow: none !important; }
+    .feedback-teal-text { color: #17a2b8 !important; }
+    .rating-option { cursor: pointer; }
+    .rating-box { color: #ccc; transition: all 0.2s; }
+    .rating-red .btn-check:checked + .rating-box { color: #dc3545 !important; transform: scale(1.2); }
+    .rating-yellow .btn-check:checked + .rating-box { color: #ffc107 !important; transform: scale(1.2); }
+    .rating-green .btn-check:checked + .rating-box { color: #198754 !important; transform: scale(1.2); }
+    .btn-check:checked + .rating-box span { font-weight: bold; color: #212529; }
+    .modal-content { background-image: radial-gradient(circle at top right, #fff9e6, #ffffff); }
+    .form-control:focus { background-color: #f8f9fa !important; box-shadow: none; border: 1px solid #17a2b8; }
+
+    .main-footer { background: #2b5484; color: white; padding: 25px 0; border-top: 3px solid rgba(255,255,255,0.1); width: 100%; margin-top: auto; }
+    .footer-contact-pill { background: rgba(255,255,255,0.15); padding: 10px 25px; border-radius: 50px; display: inline-block; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.2); }
+    .accordion { margin-bottom: 0 !important; }
+</style>
+
+<div class="container py-5 main-content-wrapper">
+    <h2 class="text-center mb-5 fw-bold"><i class="bi bi-book me-2 text-primary"></i> Book Reservation</h2>
+
+    <div class="search-wrapper">
+        <form id="searchForm">
+            <div class="search-group">
+                <input type="text" name="search" id="liveSearch" class="search-input" placeholder="Search for book or category...">
+                <button type="submit" class="search-btn"><i class="bi bi-search me-2"></i>Search</button>
+            </div>
+        </form>
+        <div id="searchCount" class="text-center mt-2 small text-muted"></div>
+        <div class="text-center mt-2 d-none" id="resetLink">
+            <a href="Book.html" class="text-muted small text-decoration-none">← Reset / Back to Home</a>
+        </div>
+    </div>
+
+    <div id="bookContent">
+        <div class="text-center text-muted py-5">กำลังโหลดข้อมูล...</div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCatModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary">Add new category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addCatForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="small fw-bold">Category Name</label>
+                        <input type="text" id="addNewCategoryInput" class="form-control" required style="border-radius: 10px;" oninput="checkCategoryDuplicate(this.value, 'add')">
+                        <div class="form-text text-danger d-none" id="addCatDupWarning">This category name already exists.</div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="small fw-bold">Category Image</label>
+                        <input type="file" id="addCatImage" class="form-control" accept="image/*" required style="border-radius: 10px;" onchange="previewCatImage(this, 'addCatImagePreviewBox')">
+                    </div>
+                    <div id="addCatImagePreviewBox" class="d-none" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:10px; margin-top:10px;">
+                        <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:15px;">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-primary w-100" id="addCatSubmitBtn" style="border-radius: 50px;">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editCatModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary">Edit category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editCatForm">
+                <input type="hidden" id="editOldCategory">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="small fw-bold">Category Name</label>
+                        <input type="text" id="editNewCategoryInput" class="form-control" required style="border-radius: 10px;" oninput="checkCategoryDuplicate(this.value, 'edit')">
+                        <div class="form-text text-danger d-none" id="editCatDupWarning">This category name already exists.</div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="small fw-bold">Category Image (leave empty to keep current)</label>
+                        <input type="file" id="editCatImage" class="form-control" accept="image/*" style="border-radius: 10px;" onchange="previewCatImage(this, 'editCatImagePreviewBox')">
+                    </div>
+                    <div id="editCatImagePreviewBox" style="height:160px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px dashed #cbd5e0; border-radius:10px; margin-top:10px;">
+                        <img src="" style="max-width:100%; max-height:100%; object-fit:contain; padding:15px;">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-primary w-100" id="editCatSubmitBtn" style="border-radius: 50px;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger">Comfirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center text-muted">
+                Are you sure you want to delete this? This action cannot be undone.
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-danger px-4" id="btnConfirmDeleteOk" style="border-radius: 50px;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addBookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success">Add new book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addBookForm">
+                <input type="hidden" id="targetCategory">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="small fw-bold">BookID (Auto)</label>
+                        <input type="text" id="nextBookIDInput" class="form-control bg-light" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold">Book Name</label>
+                        <input type="text" id="addBookName" class="form-control" required style="border-radius: 10px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="small fw-bold">Author</label>
+                            <input type="text" id="addBookAuthor" class="form-control" style="border-radius: 10px;">
+                        </div>
+                        <div class="col-6">
+                            <label class="small fw-bold">Publish Year</label>
+                            <input type="text" id="addBookYear" class="form-control" maxlength="4" style="border-radius: 10px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-success w-100" style="border-radius: 50px;">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reserveModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content booking-modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Confirm Book Reservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="reserveForm">
+          <div class="modal-body">
+            <div id="modalBookName" class="alert booking-alert py-2 fw-bold" style="border-radius: 10px;"></div>
+            <input type="hidden" id="modalBookID">
+            <div class="mb-3">
+                <label class="form-label fw-bold small">MemberID</label>
+                <input type="text" id="reserveMemberID" class="form-control" placeholder="Input MemberID......" required style="border-radius: 10px;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Return Date (Within 7 days)</label>
+                <input type="date" id="returnDatePicker" class="form-control" required style="border-radius: 10px;">
+            </div>
+            <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="acceptTerms">
+                <label class="form-check-label small" for="acceptTerms">
+                    I accept to keep the book in good condition and will be responsible for any damages.
+                </label>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-booking-cancel px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-booking-confirm px-4" id="btnConfirmBooking" disabled>Confirm</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Rate -->
+<button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+    <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
+    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+</button>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0 text-center">
+                <div class="feedback-heart-icon mb-3">
+                    <i class="bi bi-chat-heart fs-1 feedback-teal-text"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">เราบริการเป็นอย่างไรบ้าง?</h4>
+                <p class="text-muted small mb-4">ความคิดเห็นของท่านช่วยให้เราพัฒนา Learning Commons ให้ดียิ่งขึ้นครับ</p>
+
+                <form action="Index.html" method="GET">
+                    <div class="d-flex justify-content-around mb-4">
+                        <label class="rating-option rating-red">
+                            <input type="radio" name="score" value="1" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-frown fs-1"></i>
+                                <span class="d-block small mt-1">ปรับปรุง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-yellow">
+                            <input type="radio" name="score" value="3" class="btn-check" checked>
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-neutral fs-1"></i>
+                                <span class="d-block small mt-1">ปานกลาง</span>
+                            </div>
+                        </label>
+                        <label class="rating-option rating-green">
+                            <input type="radio" name="score" value="5" class="btn-check">
+                            <div class="rating-box text-center">
+                                <i class="bi bi-emoji-laughing fs-1"></i>
+                                <span class="d-block small mt-1">ดีเยี่ยม</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control border-0 bg-light" name="comment" placeholder="ข้อเสนอแนะ..." id="floatingTextarea" style="height: 100px; border-radius: 12px;"></textarea>
+                        <label for="floatingTextarea" class="text-muted">ข้อเสนอแนะเพิ่มเติม...</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold shadow-sm submit-btn-custom" style="border-radius: 12px;">
+                        ส่งความคิดเห็น <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer py-6" style="background: #2b5484; border-top: 1px solid #dee2e6;">
+    <div class="container">
+        <div class="row g-4 align-items-center text-center text-md-start">
+            <div class="col-md-4">
+                <h5 class="col-12">Learning Commons</h5>
+                <p class="small opacity-75 " style="font-size: 0.75rem;">&copy; 2026 All Rights Reserved.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="d-inline-block px-3 py-2 bg-white shadow-sm rounded-pill border">
+                    <b class="text-black">🕒 เปิดบริการ : 08.00 - 20.00 น.</b>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end text-center">
+                <div class="mb-1">
+                    <i class="bi bi-telephone-fill me-1 text-white"></i>
+                    <b>โทร :</b> 012-345 6789
+                </div>
+                <div class="small">
+                    <i class="bi bi-envelope-fill me-1 text-white"></i>
+                    <b>Email :</b> Contact@learningcommons.com
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center opacity-75" style="font-size: 0.90rem;">
+                ห้องสมุดยุคใหม่ เพื่อการเรียนรู้ที่ไร้ขีดจำกัด
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://wzjbaxnrppvfrnncttne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
+const STORAGE_BUCKET = 'book-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const NO_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
+const PER_PAGE = 10;
+let imageFileMap = {};     // ชื่อหมวดหมู่ (ตัวพิมพ์เล็ก) -> ชื่อไฟล์เต็มในถัง
+let allCategoriesLower = []; // ใช้เช็คชื่อซ้ำ
+let pendingDeleteForm = null;
+
+// ---------- อ่าน state จาก URL (?cat=&search=&page=) ----------
+function getState() {
+    const p = new URLSearchParams(window.location.search);
+    return { cat: p.get('cat') || '', search: p.get('search') || '', page: parseInt(p.get('page') || '1', 10) || 1 };
+}
+function pushState(cat, search, page) {
+    const p = new URLSearchParams();
+    if (cat) p.set('cat', cat);
+    if (search) p.set('search', search);
+    if (page && page > 1) p.set('page', page);
+    const qs = p.toString();
+    window.location.href = 'Book.html' + (qs ? '?' + qs : '');
+}
+
+async function refreshImageFileMap() {
+    const { data } = await supabase.storage.from(STORAGE_BUCKET).list('', { limit: 1000 });
+    imageFileMap = {};
+    (data || []).forEach(f => {
+        const dot = f.name.lastIndexOf('.');
+        const base = dot > -1 ? f.name.slice(0, dot) : f.name;
+        imageFileMap[base.toLowerCase()] = f.name;
+    });
+}
+
+function findCategoryImage(catName) {
+    const fileName = imageFileMap[String(catName).toLowerCase()];
+    if (!fileName) return NO_IMAGE;
+    const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
+    return data ? data.publicUrl + '?t=' + Date.now() : NO_IMAGE;
+}
+
+async function getNextBookID() {
+    const { data } = await supabase.from('book').select('BookID').order('BookID', { ascending: false }).limit(1);
+    if (data && data.length > 0) {
+        const last = data[0].BookID;
+        const number = last.replace(/[^0-9]/g, '');
+        const prefix = last.replace(/[0-9]/g, '');
+        return prefix + String(parseInt(number, 10) + 1).padStart(number.length, '0');
+    }
+    return 'B001';
+}
+
+// ---------------------------------------------------------
+// ตัวควบคุมหลัก: ตัดสินใจว่าจะเรนเดอร์หน้าหมวดหมู่ หรือหน้าตาราง
+// ---------------------------------------------------------
+async function render() {
+    const { cat, search, page } = getState();
+    document.getElementById('liveSearch').value = search;
+    document.getElementById('resetLink').classList.toggle('d-none', !(cat || search));
+
+    await refreshImageFileMap();
+
+    if (!cat && !search) {
+        await renderCategoryGrid();
+    } else {
+        await renderBookTable(cat, search, page);
+    }
+}
+
+async function renderCategoryGrid() {
+    const { data: rows } = await supabase.from('book').select('Category');
+    const fromBooks = (rows || []).map(r => r.Category);
+    const fromImages = Object.values(imageFileMap).map(f => f.slice(0, f.lastIndexOf('.')));
+    const allCats = [...new Set([...fromBooks, ...fromImages].filter(Boolean))];
+    allCategoriesLower = allCats.map(c => c.toLowerCase());
+
+    const container = document.getElementById('bookContent');
+    const cardsHTML = allCats.map(cat => {
+        const img = findCategoryImage(cat);
+        const catEsc = String(cat).replace(/'/g, "\\'");
+        return `
+        <div class="col category-item">
+            <div class="card h-100 border-0 shadow-sm text-center position-relative" style="border-radius: 20px;">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light rounded-circle shadow-sm cat-options-btn" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation();">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="openEditCatModal('${catEsc}', '${img}')"><i class="bi bi-pencil-square"></i> Edit</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="askDeleteCategory('${catEsc}')"><i class="bi bi-trash"></i> Delete</a></li>
+                    </ul>
+                </div>
+                <div style="height:150px; display:flex; align-items:center; justify-content:center;">
+                    <img src="${img}" style="max-width: 100%; max-height: 100%; object-fit: contain; padding: 15px;" onerror="this.src='${NO_IMAGE}'">
+                </div>
+                <div class="card-body p-2" style="border-radius: 0 0 20px 20px;">
+                    <h6 class="fw-bold mb-2 cat-title">${cat}</h6>
+                    <a href="?cat=${encodeURIComponent(cat)}" class="btn btn-sm btn-primary w-100" style="border-radius: 50px;">See More...</a>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4" id="categoryContainer">
+            ${cardsHTML}
+            <div class="col">
+                <div class="card h-100 card-add-category" onclick="openAddCatModal()">
+                    <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                        <i class="bi bi-plus-circle"></i>
+                        <div class="add-text">Add new category</div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+}
+
+async function renderBookTable(cat, search, page) {
+    let query = supabase.from('book').select('*', { count: 'exact' });
+    if (cat) query = query.eq('Category', cat);
+    if (search) query = query.or(`Name.ilike.%${search}%,Category.ilike.%${search}%`);
+
+    const { count: totalBooks } = await query;
+    const totalPages = Math.max(1, Math.ceil((totalBooks || 0) / PER_PAGE));
+    if (page > totalPages) page = totalPages;
+    const offset = (page - 1) * PER_PAGE;
+
+    let dataQuery = supabase.from('book').select('*');
+    if (cat) dataQuery = dataQuery.eq('Category', cat);
+    if (search) dataQuery = dataQuery.or(`Name.ilike.%${search}%,Category.ilike.%${search}%`);
+    dataQuery = dataQuery.range(offset, offset + PER_PAGE - 1);
+    const { data: books } = await dataQuery;
+
+    let busyIds = new Set();
+    if (books && books.length > 0) {
+        const ids = books.map(b => b.BookID);
+        const { data: activeBookings } = await supabase.from('booking').select('BookID').in('BookID', ids).eq('Status', 'กำลังใช้งาน');
+        (activeBookings || []).forEach(b => busyIds.add(b.BookID));
+    }
+
+    const container = document.getElementById('bookContent');
+    const title = cat ? `Category : ${cat}` : 'Search Result';
+
+    let rowsHTML = '';
+    if (!books || books.length === 0) {
+        rowsHTML = `<tr><td colspan="4" class="text-center py-5 text-muted">No results matched your search</td></tr>`;
+    } else {
+        rowsHTML = books.map(row => {
+            const bid = row.BookID;
+            const isBorrowed = busyIds.has(bid);
+            const nameEsc = String(row.Name).replace(/'/g, "\\'");
+            return `
+            <tr class="align-middle book-row">
+                <td class="book-icon-col"><i class="bi bi-book text-primary"></i></td>
+                <td class="book-name"><strong>${row.Name}</strong></td>
+                <td class="text-center">
+                    ${isBorrowed
+                        ? `<button class="btn btn-secondary btn-sm px-4 disabled" style="border-radius: 50px;">Booked</button>`
+                        : `<button class="btn btn-success btn-sm px-4" style="border-radius: 50px;" onclick="openReserveModal('${bid}', '${nameEsc}')">Reserve</button>`
+                    }
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn-info-icon" onclick="toggleDetailRow(this)"><i class="bi bi-info-circle-fill"></i></button>
+                </td>
+            </tr>
+            <tr class="book-detail-row d-none">
+                <td colspan="4" class="text-start bg-light">
+                    <div class="p-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted d-block">Category</label>
+                                <span class="fw-bold">${row.Category || ''}</span>
+                            </div>
+                            ${['Name','Author','Publisher','PublishYear'].map(field => `
+                            <div class="col-md-6">
+                                <label class="small text-muted d-block">${field === 'PublishYear' ? 'Publish Year' : field}</label>
+                                <div class="d-flex align-items-center gap-2 edit-field-form">
+                                    <span id="field-display-${bid}-${field}" class="field-display fw-bold">${row[field] ?? ''}</span>
+                                    <input id="field-input-${bid}-${field}" type="text" class="field-input d-none form-control form-control-sm"
+                                           value="${row[field] ?? ''}" ${field === 'PublishYear' ? 'maxlength="4" pattern="\\d{4}" title="4 digits only"' : ''}
+                                           style="max-width: ${field === 'PublishYear' ? '100px' : (field === 'Name' ? '220px' : '180px')};">
+                                    <button type="button" class="btn btn-sm btn-link p-0 edit-toggle-btn" onclick="toggleFieldEdit(this, '${bid}', '${field}')"><i class="bi bi-pencil-fill text-secondary"></i></button>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                        <hr class="detail-divider">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-link text-danger fw-bold text-decoration-none" onclick="askDeleteBook('${bid}')">
+                                <i class="bi bi-trash-fill me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    const addRowHTML = cat ? `
+        <tr class="row-add-book align-middle" onclick="openAddBookModal('${String(cat).replace(/'/g,"\\'")}')">
+            <td colspan="4" class="text-center py-3 fw-bold">
+                <i class="bi bi-plus-circle me-2"></i>Add New Book to Category "${cat}"
+            </td>
+        </tr>` : '';
+
+    let paginationHTML = '';
+    if (totalPages > 1) {
+        const qs = (p) => { const u = new URLSearchParams(); if (cat) u.set('cat', cat); if (search) u.set('search', search); u.set('page', p); return '?' + u.toString(); };
+        const maxVisible = 5;
+        let start = Math.max(1, page - Math.floor(maxVisible / 2));
+        let end = Math.min(totalPages, start + maxVisible - 1);
+        if (end - start + 1 < maxVisible) { start = Math.max(1, end - maxVisible + 1); }
+
+        let pages = '';
+        if (start > 1) {
+            pages += `<li><a class="page-box" href="${qs(1)}">1</a></li>`;
+            if (start > 2) pages += `<li><span class="page-box disabled">...</span></li>`;
+        }
+        for (let i = start; i <= end; i++) {
+            pages += `<li><a class="page-box ${i === page ? 'active' : ''}" href="${qs(i)}">${i}</a></li>`;
+        }
+        if (end < totalPages) {
+            if (end < totalPages - 1) pages += `<li><span class="page-box disabled">...</span></li>`;
+            pages += `<li><a class="page-box" href="${qs(totalPages)}">${totalPages}</a></li>`;
+        }
+        paginationHTML = `
+        <ul class="custom-pagination">
+            <li><a class="page-box ${page <= 1 ? 'disabled' : ''}" href="${qs(Math.max(1, page - 1))}">&lt;</a></li>
+            ${pages}
+            <li><a class="page-box ${page >= totalPages ? 'disabled' : ''}" href="${qs(Math.min(totalPages, page + 1))}">&gt;</a></li>
+        </ul>`;
+    }
+
+    container.innerHTML = `
+        <h4 class="fw-bold mb-3">${title}</h4>
+        <div class="table-responsive">
+            <table class="table table-hover bg-white shadow-sm" id="bookTable" style="border-radius: 15px; overflow: hidden;">
+                <thead class="table-dark">
+                    <tr><th><i class="bi bi-book"></i></th><th>Book Name</th><th class="text-center">Reservation</th><th class="text-center"><i class="bi bi-info-circle"></i></th></tr>
+                </thead>
+                <tbody>${rowsHTML}${addRowHTML}</tbody>
+            </table>
+        </div>
+        ${paginationHTML}`;
+
+    window.__bookPageState = { cat, search, page };
+}
+
+// ---------------------------------------------------------
+// ค้นหา (ส่ง GET จริง ไม่ใช่ live filter ในหน้าตาราง เพราะต้อง query ใหม่จาก Supabase)
+// ---------------------------------------------------------
+document.getElementById('searchForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const val = document.getElementById('liveSearch').value.trim();
+    pushState('', val, 1);
+});
+
+// live filter เบาๆ ระหว่างพิมพ์ (กรองเฉพาะรายการที่โหลดมาแล้วในหน้าปัจจุบัน เหมือนพฤติกรรมเดิม)
+document.getElementById('liveSearch').addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    let count = 0;
+    document.querySelectorAll('.book-row').forEach(row => {
+        const name = row.querySelector('.book-name').innerText.toLowerCase();
+        if (name.includes(filter)) { row.style.display = ""; count++; } else { row.style.display = "none"; }
+    });
+    document.querySelectorAll('.category-item').forEach(item => {
+        const title = item.querySelector('.cat-title').innerText.toLowerCase();
+        if (title.includes(filter)) { item.style.display = ""; count++; } else { item.style.display = "none"; }
+    });
+    const resultDiv = document.getElementById('searchCount');
+    if (filter === "") { resultDiv.innerText = ""; }
+    else { resultDiv.innerHTML = `Found <span class="text-primary fw-bold">${count}</span> Results`; }
+});
+
+document.getElementById('acceptTerms').addEventListener('change', function() {
+    document.getElementById('btnConfirmBooking').disabled = !this.checked;
+});
+
+window.checkCategoryDuplicate = function (value, context) {
+    const name = value.trim().toLowerCase();
+    let isDup = false;
+    if (context === 'add') {
+        isDup = name !== '' && allCategoriesLower.includes(name);
+        document.getElementById('addCatDupWarning').classList.toggle('d-none', !isDup);
+        document.getElementById('addCatSubmitBtn').disabled = isDup;
+    } else if (context === 'edit') {
+        const oldName = document.getElementById('editOldCategory').value.trim().toLowerCase();
+        isDup = name !== '' && name !== oldName && allCategoriesLower.includes(name);
+        document.getElementById('editCatDupWarning').classList.toggle('d-none', !isDup);
+        document.getElementById('editCatSubmitBtn').disabled = isDup;
+    }
+};
+
+window.previewCatImage = function (input, boxId) {
+    const box = document.getElementById(boxId);
+    const img = box.querySelector('img');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) { img.src = e.target.result; box.classList.remove('d-none'); };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.openAddCatModal = function () {
+    document.getElementById('addCatForm').reset();
+    document.getElementById('addCatDupWarning').classList.add('d-none');
+    document.getElementById('addCatSubmitBtn').disabled = false;
+    document.getElementById('addCatImagePreviewBox').classList.add('d-none');
+    new bootstrap.Modal(document.getElementById('addCatModal')).show();
+};
+
+window.openEditCatModal = function (catName, imgSrc) {
+    document.getElementById('editOldCategory').value = catName;
+    document.getElementById('editNewCategoryInput').value = catName;
+    document.getElementById('editCatDupWarning').classList.add('d-none');
+    document.getElementById('editCatSubmitBtn').disabled = false;
+    const box = document.getElementById('editCatImagePreviewBox');
+    box.querySelector('img').src = imgSrc;
+    new bootstrap.Modal(document.getElementById('editCatModal')).show();
+};
+
+// --- เพิ่มหมวดหมู่ ---
+document.getElementById('addCatForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const NewCat = document.getElementById('addNewCategoryInput').value.trim();
+    const file = document.getElementById('addCatImage').files[0];
+
+    if (allCategoriesLower.includes(NewCat.toLowerCase())) {
+        bootstrap.Modal.getInstance(document.getElementById('addCatModal')).hide();
+        showPopupAlert('This category name is already used. Please pick a different name.', 'back');
+        return;
+    }
+
+    if (file) {
+        const ext = file.name.split('.').pop();
+        const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(NewCat + '.' + ext, file, { upsert: true });
+        if (error) { showPopupAlert('Upload failed: ' + error.message); return; }
+    }
+    showPopupAlert(`Great! The new category "${NewCat}" was added.`, 'Book.html');
+});
+
+// --- แก้ไขหมวดหมู่ (rename ไฟล์รูป + อัปเดต Category ในตาราง book ทุกแถว) ---
+document.getElementById('editCatForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const OldCat = document.getElementById('editOldCategory').value;
+    const NewCat = document.getElementById('editNewCategoryInput').value.trim();
+    const file = document.getElementById('editCatImage').files[0];
+    const changed = NewCat.toLowerCase() !== OldCat.toLowerCase();
+
+    if (changed && allCategoriesLower.includes(NewCat.toLowerCase())) {
+        bootstrap.Modal.getInstance(document.getElementById('editCatModal')).hide();
+        showPopupAlert('This category name is already used. Please pick a different name.', 'back');
+        return;
+    }
+
+    const oldFile = imageFileMap[OldCat.toLowerCase()];
+    if (file) {
+        const ext = file.name.split('.').pop();
+        await supabase.storage.from(STORAGE_BUCKET).upload(NewCat + '.' + ext, file, { upsert: true });
+        if (oldFile && oldFile.toLowerCase() !== (NewCat + '.' + ext).toLowerCase()) {
+            await supabase.storage.from(STORAGE_BUCKET).remove([oldFile]).catch(() => {});
+        }
+    } else if (oldFile && changed) {
+        const ext = oldFile.slice(oldFile.lastIndexOf('.') + 1);
+        await supabase.storage.from(STORAGE_BUCKET).move(oldFile, NewCat + '.' + ext).catch(() => {});
+    }
+
+    if (changed) {
+        await supabase.from('book').update({ Category: NewCat }).eq('Category', OldCat);
+    }
+    showPopupAlert('Great! The category has been updated.', 'Book.html');
+});
+
+// --- ลบหมวดหมู่ (ลบแค่รูป ไม่ลบหนังสือ/ไม่เปลี่ยน Category ตามพฤติกรรมเดิม) ---
+window.askDeleteCategory = function (catName) {
+    pendingDeleteForm = { type: 'category', name: catName };
+    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+};
+
+// --- ลบหนังสือ ---
+window.askDeleteBook = function (bookId) {
+    pendingDeleteForm = { type: 'book', id: bookId };
+    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+};
+
+document.getElementById('btnConfirmDeleteOk').addEventListener('click', async function () {
+    if (!pendingDeleteForm) return;
+    bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
+
+    if (pendingDeleteForm.type === 'category') {
+        const fileName = imageFileMap[pendingDeleteForm.name.toLowerCase()];
+        if (fileName) { await supabase.storage.from(STORAGE_BUCKET).remove([fileName]).catch(() => {}); }
+        window.location.href = 'Book.html';
+    } else if (pendingDeleteForm.type === 'book') {
+        await supabase.from('book').delete().eq('BookID', pendingDeleteForm.id);
+        const s = window.__bookPageState || getState();
+        pushState(s.cat, s.search, s.page);
+    }
+    pendingDeleteForm = null;
+});
+
+// --- เพิ่มหนังสือใหม่ ---
+window.openAddBookModal = async function (cat) {
+    document.getElementById('targetCategory').value = cat;
+    document.getElementById('addBookForm').reset();
+    document.getElementById('nextBookIDInput').value = await getNextBookID();
+    new bootstrap.Modal(document.getElementById('addBookModal')).show();
+};
+
+document.getElementById('addBookForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const BookID = document.getElementById('nextBookIDInput').value;
+    const Name = document.getElementById('addBookName').value.trim();
+    const Author = document.getElementById('addBookAuthor').value.trim();
+    const PublishYear = document.getElementById('addBookYear').value.trim();
+    const Category = document.getElementById('targetCategory').value;
+
+    const { error } = await supabase.from('book').insert({ BookID, Name, Author, PublishYear, Category });
+    bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
+    if (error) { showPopupAlert('Add failed: ' + error.message); return; }
+    showPopupAlert('Great! The book has been added.', 'Book.html?cat=' + encodeURIComponent(Category));
+});
+
+// --- ขยาย/ย่อ แถวรายละเอียดหนังสือ ---
+window.toggleDetailRow = function (btn) {
+    const row = btn.closest('tr').nextElementSibling;
+    if (row && row.classList.contains('book-detail-row')) { row.classList.toggle('d-none'); }
+};
+
+// --- เปิด/ปิด โหมดเเก้ไขทีละฟิลด์ (ปากกา <-> save) ---
+window.toggleFieldEdit = function (btn, bookId, fieldName) {
+    const display = document.getElementById('field-display-' + bookId + '-' + fieldName);
+    const input = document.getElementById('field-input-' + bookId + '-' + fieldName);
+    const icon = btn.querySelector('i');
+
+    if (input.classList.contains('d-none')) {
+        display.classList.add('d-none');
+        input.classList.remove('d-none');
+        input.focus();
+        icon.className = 'bi bi-check-circle-fill text-success';
+    } else {
+        saveBookField(bookId, fieldName, input.value.trim());
+    }
+};
+
+async function saveBookField(bookId, fieldName, value) {
+    if (fieldName === 'PublishYear' && !/^\d{4}$/.test(value)) {
+        showPopupAlert('Please enter a 4-digit year, like 2020.', 'back');
+        return;
+    }
+    const { error } = await supabase.from('book').update({ [fieldName]: value }).eq('BookID', bookId);
+    if (error) { showPopupAlert('Update failed: ' + error.message); return; }
+    const s = window.__bookPageState || getState();
+    pushState(s.cat, s.search, s.page);
+}
+
+// --- จอง/ยืมหนังสือ ---
+window.openReserveModal = function (id, name) {
+    document.getElementById('modalBookID').value = id;
+    document.getElementById('modalBookName').innerHTML = "Choose : " + name;
+    document.getElementById('acceptTerms').checked = false;
+    document.getElementById('btnConfirmBooking').disabled = true;
+
+    const today = new Date();
+    const minDate = new Date(today); minDate.setDate(today.getDate() + 1);
+    const maxDate = new Date(today); maxDate.setDate(today.getDate() + 7);
+    const picker = document.getElementById('returnDatePicker');
+    picker.min = minDate.toISOString().split('T')[0];
+    picker.max = maxDate.toISOString().split('T')[0];
+    picker.value = minDate.toISOString().split('T')[0];
+    new bootstrap.Modal(document.getElementById('reserveModal')).show();
+};
+
+function toDMY(d) {
+    return String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear();
+}
+
+document.getElementById('reserveForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const MemberID = document.getElementById('reserveMemberID').value.trim();
+    const BookID = document.getElementById('modalBookID').value;
+    const ReturnDate = document.getElementById('returnDatePicker').value;
+    const BookingDate = toDMY(new Date());
+    const DueDate = toDMY(new Date(ReturnDate));
+
+    const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
+    if (!memberRows || memberRows.length === 0) {
+        bootstrap.Modal.getInstance(document.getElementById('reserveModal')).hide();
+        showPopupAlert('We can not find that member ID. Please check and try again.', 'back');
+        return;
+    }
+
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true }).eq('MemberID', MemberID).eq('Status', 'กำลังใช้งาน');
+    if ((count || 0) >= 3) {
+        bootstrap.Modal.getInstance(document.getElementById('reserveModal')).hide();
+        showPopupAlert('Sorry, you already have 3 books. Please return one before borrowing more.', 'Status.html');
+        return;
+    }
+
+    const { data: lastRows } = await supabase.from('booking').select('BookingID').order('BookingID', { ascending: false }).limit(1);
+    const BookingID = (lastRows && lastRows.length > 0) ? 'BK' + String(parseInt(lastRows[0].BookingID.substring(2), 10) + 1).padStart(3, '0') : 'BK001';
+
+    const { error } = await supabase.from('booking').insert({ BookingID, MemberID, BookID, BookingDate, DueDate, Status: 'กำลังใช้งาน' });
+    bootstrap.Modal.getInstance(document.getElementById('reserveModal')).hide();
+    if (error) { showPopupAlert('Booking failed: ' + error.message); return; }
+    showPopupAlert('Booked Complete', 'Status.html', '#3B6540');
+});
+
+// Floating feedback button ลอยเหนือ footer
+window.addEventListener('scroll', function () {
+    const btn = document.querySelector('.floating-feedback-btn');
+    const footer = document.querySelector('.main-footer');
+    if (!footer || !btn) return;
+    const scrollPos = window.innerHeight + window.scrollY;
+    const footerTop = footer.offsetTop;
+    if (scrollPos >= footerTop) {
+        btn.style.position = 'absolute';
+        btn.style.top = (footerTop - btn.offsetHeight - 30) + 'px';
+        btn.style.bottom = 'auto';
+    } else {
+        btn.style.position = 'fixed';
+        btn.style.top = '';
+        btn.style.bottom = '30px';
+    }
+});
+
+render();
+</script>
+</body>
+</html>
