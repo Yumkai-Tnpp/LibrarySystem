@@ -240,7 +240,7 @@
 <!-- Rate -->
 <button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
     <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
-    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+    <span class="fw-bold feedback-btn-text">ประเมินความพึงพอใจ</span>
 </button>
 
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
@@ -284,6 +284,17 @@
 <style>
     .floating-feedback-btn { position: fixed; bottom: 30px; right: 30px; z-index: 9999; padding: 12px 25px; border-radius: 50px; border: 2px solid #fff; transition: all 0.3s ease; display: flex; align-items: center; }
     .floating-feedback-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important; }
+    /* Responsive: บนมือถือย่อปุ่มประเมินความพึงพอใจให้เหลือแค่ไอคอนกลม ไม่บังเนื้อหา */
+    @media (max-width: 576px) {
+        .floating-feedback-btn {
+            width: 52px; height: 52px; padding: 0 !important;
+            border-radius: 50%; justify-content: center;
+            bottom: 16px !important; right: 16px !important;
+        }
+        .floating-feedback-btn .feedback-btn-text { display: none; }
+        .floating-feedback-btn i { margin: 0 !important; font-size: 1.3rem; }
+    }
+
     .rating-option { cursor: pointer; }
     .rating-box { color: #ccc; transition: all 0.2s; }
     .rating-box:hover { color: #666; transform: scale(1.1); }

@@ -300,6 +300,17 @@ function showPopupAlert(message, redirect, color) {
         transform: scale(1.1) translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
     }
+    /* Responsive: บนมือถือย่อปุ่มประเมินความพึงพอใจให้เหลือแค่ไอคอนกลม ไม่บังเนื้อหา */
+    @media (max-width: 576px) {
+        .floating-feedback-btn {
+            width: 52px; height: 52px; padding: 0 !important;
+            border-radius: 50%; justify-content: center;
+            bottom: 16px !important; right: 16px !important;
+        }
+        .floating-feedback-btn .feedback-btn-text { display: none; }
+        .floating-feedback-btn i { margin: 0 !important; font-size: 1.3rem; }
+    }
+
 
     /* สไตล์ตัวเลือก Rating ใน Modal */
     .rating-option { cursor: pointer; }
@@ -369,8 +380,9 @@ function showPopupAlert(message, redirect, color) {
             <div id="bookRName" class="alert booking-alert mb-4"></div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold small">MemberID</label>
-                <input type="text" id="bookMemberID" class="form-control" placeholder="Input MemberID..." required style="border-radius: 12px;">
+                <label class="form-label fw-bold small">MemberID (9 digits)</label>
+                <input type="text" id="bookMemberID" class="form-control" inputmode="numeric" maxlength="9" placeholder="Input 9-digit MemberID..." required style="border-radius: 12px;">
+                <div id="bookMemberIDError" class="small text-danger mt-1 d-none"></div>
             </div>
 
             <div class="mb-3">
@@ -385,6 +397,7 @@ function showPopupAlert(message, redirect, color) {
                 <div class="col-6">
                     <label class="small fw-bold">Start Time (08:00-20:00)</label>
                     <input type="time" id="RoomStartTime" class="form-control" min="08:00" max="19:59" required onchange="calcRoomEndTime()" style="border-radius: 12px;">
+                    <div id="RoomStartTimeError" class="small text-danger mt-1 d-none"></div>
                 </div>
                 <div class="col-6">
                     <label class="small fw-bold">End Time (3 hours limit)</label>
@@ -506,7 +519,7 @@ function showPopupAlert(message, redirect, color) {
 <!-- Rate -->
 <button type="button" class="btn btn-warning shadow-lg floating-feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
     <i class="bi bi-emoji-smile-fill fs-4 me-2"></i>
-    <span class="fw-bold">ประเมินความพึงพอใจ</span>
+    <span class="fw-bold feedback-btn-text">ประเมินความพึงพอใจ</span>
 </button>
 
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
@@ -583,6 +596,65 @@ const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
 const STORAGE_BUCKET = 'room-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน (แยกจาก boardgame-images)
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ---------- ตัวช่วย validate ฟอร์มจอง (UX: error ทันที, MemberID ตัวเลข 9 หลัก, เวลาต้องอยู่ในช่วงเปิดบริการ) ----------
+function bindBookingValidation({ memberInputId, memberErrId, timeInputId, timeErrId, timeMin, timeMax, checkboxId, confirmBtnId }) {
+    const memberInput = document.getElementById(memberInputId);
+    const memberErr = document.getElementById(memberErrId);
+    const checkbox = checkboxId ? document.getElementById(checkboxId) : null;
+    const confirmBtn = document.getElementById(confirmBtnId);
+    const timeInput = timeInputId ? document.getElementById(timeInputId) : null;
+    const timeErr = timeInputId ? document.getElementById(timeErrId) : null;
+
+    let memberFormatOk = false, memberExistsOk = true, timeOk = !timeInput;
+
+    function update() { confirmBtn.disabled = !((!checkbox || checkbox.checked) && memberFormatOk && memberExistsOk && timeOk); }
+
+    memberInput.addEventListener('input', function () {
+        const digits = memberInput.value.replace(/[^0-9]/g, '').slice(0, 9);
+        if (digits !== memberInput.value) memberInput.value = digits;
+        memberFormatOk = digits.length === 9;
+        memberExistsOk = true;
+        if (digits.length > 0 && digits.length < 9) { memberErr.textContent = 'รหัสสมาชิกต้องเป็นตัวเลข 9 หลัก'; memberErr.classList.remove('d-none'); memberInput.classList.add('is-invalid'); }
+        else { memberErr.classList.add('d-none'); memberInput.classList.remove('is-invalid'); }
+        update();
+    });
+    memberInput.addEventListener('blur', async function () {
+        if (memberInput.value.length !== 9) return;
+        const { data } = await supabase.from('member').select('MemberID').eq('MemberID', memberInput.value);
+        if (!data || data.length === 0) {
+            memberErr.textContent = 'ไม่พบรหัสสมาชิกนี้ในระบบ'; memberErr.classList.remove('d-none'); memberInput.classList.add('is-invalid');
+            memberExistsOk = false;
+        } else {
+            memberErr.classList.add('d-none'); memberInput.classList.remove('is-invalid');
+            memberExistsOk = true;
+        }
+        update();
+    });
+
+    if (timeInput) {
+        function validateTime() {
+            const v = timeInput.value;
+            let msg = '';
+            if (v && (v < timeMin || v > timeMax)) msg = `กรุณาเลือกเวลาระหว่าง ${timeMin}-${timeMax} น. (นอกเวลาเปิดบริการห้องสมุด)`;
+            if (msg) { timeErr.textContent = msg; timeErr.classList.remove('d-none'); timeInput.classList.add('is-invalid'); }
+            else { timeErr.classList.add('d-none'); timeInput.classList.remove('is-invalid'); }
+            timeOk = !!v && !msg;
+            update();
+        }
+        timeInput.addEventListener('input', validateTime);
+        timeInput.addEventListener('change', validateTime);
+    }
+
+    if (checkbox) checkbox.addEventListener('change', update);
+
+    return function reset() {
+        memberFormatOk = false; memberExistsOk = true; timeOk = !timeInput;
+        memberErr.classList.add('d-none'); memberInput.classList.remove('is-invalid');
+        if (timeErr) { timeErr.classList.add('d-none'); timeInput.classList.remove('is-invalid'); }
+        update();
+    };
+}
 
 const NO_IMAGE = 'https://via.placeholder.com/400x250?text=Room+Image';
 let rooms = [];
@@ -780,8 +852,10 @@ document.getElementById('liveSearch').addEventListener('input', function() {
     });
 });
 
-document.getElementById('acceptTerms').addEventListener('change', function() {
-    document.getElementById('btnConfirmBooking').disabled = !this.checked;
+const resetRoomBookingValidation = bindBookingValidation({
+    memberInputId: 'bookMemberID', memberErrId: 'bookMemberIDError',
+    timeInputId: 'RoomStartTime', timeErrId: 'RoomStartTimeError', timeMin: '08:00', timeMax: '19:59',
+    checkboxId: 'acceptTerms', confirmBtnId: 'btnConfirmBooking'
 });
 
 window.openBookingModal = function (id, name) {
@@ -800,7 +874,7 @@ window.openBookingModal = function (id, name) {
     document.getElementById('RoomStartTime').value = '';
     document.getElementById('RoomEndTime').value = '';
     document.getElementById('acceptTerms').checked = false;
-    document.getElementById('btnConfirmBooking').disabled = true;
+    resetRoomBookingValidation();
     new bootstrap.Modal(document.getElementById('bookingModal')).show();
 };
 
