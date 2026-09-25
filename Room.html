@@ -768,6 +768,14 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         return;
     }
 
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true })
+        .eq('MemberID', MemberID).eq('Status', 'กำลังใช้งาน').like('BookID', 'R%');
+    if ((count || 0) >= 1) {
+        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+        showPopupAlert('Sorry, you already have a room booking. Please return it before booking another.', 'back');
+        return;
+    }
+
     const { data: allBookings } = await supabase.from('booking').select('BookingID');
     let maxB = 0;
     (allBookings || []).forEach(r => {

@@ -916,6 +916,10 @@ document.getElementById('roomReserveForm').addEventListener('submit', async func
     const { data: memberRows } = await supabase.from('member').select('MemberID').eq('MemberID', MemberID);
     if (!memberRows || memberRows.length === 0) { bootstrap.Modal.getInstance(document.getElementById('roomReserveModal')).hide(); showPopupAlert('We can not find that member ID. Please check and try again.', 'back'); return; }
 
+    const { count } = await supabase.from('booking').select('*', { count: 'exact', head: true })
+        .eq('MemberID', MemberID).eq('Status', 'กำลังใช้งาน').like('BookID', 'R%');
+    if ((count || 0) >= 1) { bootstrap.Modal.getInstance(document.getElementById('roomReserveModal')).hide(); showPopupAlert('Sorry, you already have a room booking. Please return it before booking another.', 'back'); return; }
+
     const { data: lastRows } = await supabase.from('booking').select('BookingID').order('BookingID', { ascending: false }).limit(1);
     const BookingID = (lastRows && lastRows.length > 0) ? 'BK' + String(parseInt(lastRows[0].BookingID.substring(2), 10) + 1).padStart(3, '0') : 'BK001';
 
