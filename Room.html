@@ -823,7 +823,7 @@ document.getElementById('editRoomForm').addEventListener('submit', async functio
     const { error } = await supabase.from('room').update({ Name }).eq('RoomID', RID);
     bootstrap.Modal.getInstance(document.getElementById('editRoomModal')).hide();
     if (error) { showPopupAlert('Edit failed: ' + error.message); return; }
-    showPopupAlert('Great! The room has been updated.', 'Room.html');
+    showPopupAlert('Great! The room has been updated.', 'Room.html', '#3B6540');
 });
 
 // ---------------------------------------------------------
@@ -835,7 +835,7 @@ document.getElementById('btnConfirmDeleteOk').addEventListener('click', async fu
     const { error } = await supabase.from('room').delete().eq('RoomID', pendingDeleteId);
     bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
     if (error) { showPopupAlert('Delete failed: ' + error.message); return; }
-    showPopupAlert('Done! The room has been deleted.', 'Room.html');
+    showPopupAlert('Done! The room has been deleted.', 'Room.html', '#3B6540');
 });
 
 // ---------------------------------------------------------

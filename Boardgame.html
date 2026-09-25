@@ -861,7 +861,7 @@ document.getElementById('addGameForm').addEventListener('submit', async function
     bootstrap.Modal.getInstance(document.getElementById('addGameModal')).hide();
     if (error) { showPopupAlert('Add failed: ' + error.message); return; }
 
-    showPopupAlert('Add new ' + Name + ' Boardgame success!', 'reload');
+    showPopupAlert('Add new ' + Name + ' Boardgame success!', 'reload', '#3B6540');
 });
 
 // ---------------------------------------------------------
@@ -891,7 +891,7 @@ document.getElementById('editGameForm').addEventListener('submit', async functio
     bootstrap.Modal.getInstance(document.getElementById('editGameModal')).hide();
     if (error) { showPopupAlert('Edit failed: ' + error.message); return; }
 
-    showPopupAlert('Edit boardgame success!', 'reload');
+    showPopupAlert('Edit boardgame success!', 'reload', '#3B6540');
 });
 
 // ---------------------------------------------------------
@@ -905,7 +905,7 @@ document.getElementById('btnConfirmDeleteOk').addEventListener('click', async fu
     const { error } = await supabase.from('boardgame').delete().eq('BoardgameID', pendingDeleteId);
     bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
     if (error) { showPopupAlert('Delete failed: ' + error.message); return; }
-    showPopupAlert('Delete boardgame success!', 'reload');
+    showPopupAlert('Delete boardgame success!', 'reload', '#3B6540');
 });
 
 // ---------------------------------------------------------

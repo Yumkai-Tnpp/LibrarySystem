@@ -889,12 +889,14 @@ document.getElementById('addCatForm').addEventListener('submit', async function 
         return;
     }
 
+    bootstrap.Modal.getInstance(document.getElementById('addCatModal')).hide();
+
     if (file) {
         const ext = file.name.split('.').pop();
         const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(NewCat + '.' + ext, file, { upsert: true });
         if (error) { showPopupAlert('Upload failed: ' + error.message); return; }
     }
-    showPopupAlert(`Great! The new category "${NewCat}" was added.`, 'Book.html');
+    showPopupAlert(`Great! The new category "${NewCat}" was added.`, 'Book.html', '#3B6540');
 });
 
 // --- แก้ไขหมวดหมู่ (rename ไฟล์รูป + อัปเดต Category ในตาราง book ทุกแถว) ---
@@ -911,6 +913,8 @@ document.getElementById('editCatForm').addEventListener('submit', async function
         return;
     }
 
+    bootstrap.Modal.getInstance(document.getElementById('editCatModal')).hide();
+
     const oldFile = imageFileMap[OldCat.toLowerCase()];
     if (file) {
         const ext = file.name.split('.').pop();
@@ -926,7 +930,7 @@ document.getElementById('editCatForm').addEventListener('submit', async function
     if (changed) {
         await supabase.from('book').update({ Category: NewCat }).eq('Category', OldCat);
     }
-    showPopupAlert('Great! The category has been updated.', 'Book.html');
+    showPopupAlert('Great! The category has been updated.', 'Book.html', '#3B6540');
 });
 
 // --- ลบหมวดหมู่ (ลบแค่รูป ไม่ลบหนังสือ/ไม่เปลี่ยน Category ตามพฤติกรรมเดิม) ---
@@ -976,7 +980,7 @@ document.getElementById('addBookForm').addEventListener('submit', async function
     const { error } = await supabase.from('book').insert({ BookID, Name, Author, PublishYear, Category });
     bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
     if (error) { showPopupAlert('Add failed: ' + error.message); return; }
-    showPopupAlert('Great! The book has been added.', 'Book.html?cat=' + encodeURIComponent(Category));
+    showPopupAlert('Great! The book has been added.', 'Book.html?cat=' + encodeURIComponent(Category), '#3B6540');
 });
 
 // --- ขยาย/ย่อ แถวรายละเอียดหนังสือ ---

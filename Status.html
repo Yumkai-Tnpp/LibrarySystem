@@ -764,7 +764,7 @@ window.extendAction = async function (actionType) {
         const { error } = await supabase.from('booking').update({ DueDate: newDate }).eq('BookingID', currentData.BookingID);
         editModal.hide();
         if (error) { showPopupAlert('Sorry, something went wrong. Please try again.', null); return; }
-        showPopupAlert(`Great! You can keep the book until ${newDate}. (You can only extend once.)`, 'reload');
+        showPopupAlert(`Great! You can keep the book until ${newDate}. (You can only extend once.)`, 'reload', '#3B6540');
     } else {
         const [h, m] = currentData.EndTime.split(':').map(Number);
         let total = h * 60 + m + 60;
@@ -772,7 +772,7 @@ window.extendAction = async function (actionType) {
         const { error } = await supabase.from('booking').update({ EndTime: newEnd }).eq('BookingID', currentData.BookingID);
         editModal.hide();
         if (error) { showPopupAlert('Sorry, something went wrong. Please try again.', null); return; }
-        showPopupAlert('Great! Your time has been extended. (You can only extend once.)', 'reload');
+        showPopupAlert('Great! Your time has been extended. (You can only extend once.)', 'reload', '#3B6540');
     }
 };
 
