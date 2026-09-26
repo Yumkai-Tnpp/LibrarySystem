@@ -438,6 +438,7 @@ function showPopupAlert(message, redirect, color) {
             <div class="mb-3">
                 <label class="small fw-bold">Name</label>
                 <input type="text" id="addRoomName" class="form-control" required style="border-radius: 12px;">
+                <div id="addRoomNameError" class="small text-danger mt-1 d-none">This name already exists. Please choose a different name.</div>
             </div>
             <div class="mb-3">
                 <label class="small fw-bold">Room Type</label>
@@ -462,7 +463,7 @@ function showPopupAlert(message, redirect, color) {
             </div>
         </div>
         <div class="modal-footer border-0">
-            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save</button>
+            <button type="submit" class="btn btn-primary w-100" id="addRoomSubmitBtn" style="border-radius: 50px; font-weight: bold;">Save</button>
         </div>
       </form>
     </div>
@@ -658,6 +659,11 @@ function bindBookingValidation({ memberInputId, memberErrId, timeInputId, timeEr
 
 const NO_IMAGE = 'https://via.placeholder.com/400x250?text=Room+Image';
 let rooms = [];
+document.getElementById('addRoomName').addEventListener('input', function () {
+    const dup = rooms.some(r => r.Name.trim().toLowerCase() === this.value.trim().toLowerCase());
+    document.getElementById('addRoomNameError').classList.toggle('d-none', !dup);
+    document.getElementById('addRoomSubmitBtn').disabled = dup;
+});
 let pendingDeleteId = null;
 
 // รูปห้องเก็บเป็น "<RoomID>.jpg" เสมอ (ตามพฤติกรรมเดิมของ PHP ที่ move_uploaded_file เป็น .jpg ทุกครั้ง)
@@ -890,6 +896,8 @@ window.openAddRoomModal = async function () {
     document.getElementById('addRoomForm').reset();
     document.getElementById('addRoomImagePreviewBox').classList.add('d-none');
     document.getElementById('newTypeDiv').classList.add('d-none');
+    document.getElementById('addRoomNameError').classList.add('d-none');
+    document.getElementById('addRoomSubmitBtn').disabled = false;
     document.getElementById('nextRoomIDInput').value = await getNextRoomID();
     new bootstrap.Modal(document.getElementById('addRoomModal')).show();
 };

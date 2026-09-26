@@ -261,7 +261,7 @@ function showPopupAlert(message, redirect, color) {
                     <div class="mb-3">
                         <label class="small fw-bold">Category Name</label>
                         <input type="text" id="addNewCategoryInput" class="form-control" required style="border-radius: 10px;" oninput="checkCategoryDuplicate(this.value, 'add')">
-                        <div class="form-text text-danger d-none" id="addCatDupWarning">This category name already exists.</div>
+                        <div class="form-text text-danger d-none" id="addCatDupWarning">This name already exists. Please choose a different name.</div>
                     </div>
                     <div class="mb-2">
                         <label class="small fw-bold">Category Image</label>
@@ -292,7 +292,7 @@ function showPopupAlert(message, redirect, color) {
                     <div class="mb-3">
                         <label class="small fw-bold">Category Name</label>
                         <input type="text" id="editNewCategoryInput" class="form-control" required style="border-radius: 10px;" oninput="checkCategoryDuplicate(this.value, 'edit')">
-                        <div class="form-text text-danger d-none" id="editCatDupWarning">This category name already exists.</div>
+                        <div class="form-text text-danger d-none" id="editCatDupWarning">This name already exists. Please choose a different name.</div>
                     </div>
                     <div class="mb-2">
                         <label class="small fw-bold">Category Image (leave empty to keep current)</label>

@@ -426,6 +426,7 @@ function showPopupAlert(message, redirect, color) {
             <div class="mb-3">
                 <label class="small fw-bold">Name</label>
                 <input type="text" id="addGameName" class="form-control" required style="border-radius: 12px;">
+                <div id="addGameNameError" class="small text-danger mt-1 d-none">This name already exists. Please choose a different name.</div>
             </div>
             <div class="mb-3">
                 <label class="small fw-bold">Player</label>
@@ -450,7 +451,7 @@ function showPopupAlert(message, redirect, color) {
             </div>
         </div>
         <div class="modal-footer border-0">
-            <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px; font-weight: bold;">Save</button>
+            <button type="submit" class="btn btn-primary w-100" id="addGameSubmitBtn" style="border-radius: 50px; font-weight: bold;">Save</button>
         </div>
       </form>
     </div>
@@ -674,6 +675,11 @@ window.supabase = supabase;
 
 const NO_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
 let boardgames = [];   // แคชข้อมูลบอร์ดเกมทั้งหมด
+document.getElementById('addGameName').addEventListener('input', function () {
+    const dup = boardgames.some(g => g.Name.trim().toLowerCase() === this.value.trim().toLowerCase());
+    document.getElementById('addGameNameError').classList.toggle('d-none', !dup);
+    document.getElementById('addGameSubmitBtn').disabled = dup;
+});
 let busyIds = new Set(); // BoardgameID ที่กำลังถูกเล่นอยู่
 let pendingDeleteId = null, pendingDeleteName = null;
 let imageFileMap = {}; // ชื่อเกม (ไม่มีนามสกุล) -> ชื่อไฟล์เต็มในถัง Storage
@@ -948,6 +954,8 @@ window.openAddGameModal = async function () {
     document.getElementById('addGameForm').reset();
     document.getElementById('addGameImagePreviewBox').classList.add('d-none');
     document.getElementById('newCatDiv').classList.add('d-none');
+    document.getElementById('addGameNameError').classList.add('d-none');
+    document.getElementById('addGameSubmitBtn').disabled = false;
     document.getElementById('nextBGIDInput').value = await getNextBGID();
     new bootstrap.Modal(document.getElementById('addGameModal')).show();
 };
