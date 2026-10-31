@@ -47,6 +47,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Shared decoration styles (same colors, nicer look) -->
     <link rel="stylesheet" href="decor.css">
+    <script src="toast.js"></script>
+    <script src="booked-details.js"></script>
 </head>
 
 <body>
@@ -128,6 +130,15 @@
 </div>
 <script>
 function showPopupAlert(message, redirect, color) {
+    // Success (green) messages now show as a toast at the bottom of the screen
+    // instead of a pop-up window. Errors (red) still use the pop-up below.
+    if (color) {
+        if (redirect === 'back') { showToastAfterRedirect(message); window.history.back(); }
+        else if (redirect === 'reload') { showToastAfterRedirect(message); window.location.reload(); }
+        else if (redirect) { showToastAfterRedirect(message); window.location.href = redirect; }
+        else { showToast(message); }
+        return;
+    }
     var msgEl = document.getElementById('popupAlertMessage');
     if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
     var success = !!color;
@@ -503,6 +514,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
 const STORAGE_BUCKET = 'book-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.__sb = supabase; // booked-details.js uses this same client
 
 // ---------- ตัวช่วย validate ฟอร์มจอง (UX: error ทันที, MemberID ตัวเลข 9 หลัก) ----------
 function bindBookingValidation({ memberInputId, memberErrId, timeInputId, timeErrId, timeMin, timeMax, checkboxId, confirmBtnId }) {
@@ -716,12 +728,12 @@ async function renderBookTable(cat, search, page) {
                 <td class="book-name"><strong>${row.Name}</strong></td>
                 <td class="text-center">
                     ${isBorrowed
-                        ? `<button class="btn btn-secondary btn-sm px-4 disabled" style="border-radius: 50px;">Booked</button>`
+                        ? `<button class="btn btn-secondary btn-sm px-4" style="border-radius: 50px;" onclick="openBookedDetails('book', '${bid}', '${nameEsc}')"><i class="bi bi-info-circle me-1"></i>Booked</button>`
                         : `<button class="btn btn-success btn-sm px-4" style="border-radius: 50px;" onclick="openReserveModal('${bid}', '${nameEsc}')">Reserve</button>`
                     }
                 </td>
                 <td class="text-center">
-                    <button type="button" class="btn-info-icon" onclick="toggleDetailRow(this)"><i class="bi bi-info-circle-fill"></i></button>
+                    <button type="button" class="btn-detail-toggle" onclick="toggleDetailRow(this)">Details <i class="bi bi-chevron-down"></i></button>
                 </td>
             </tr>
             <tr class="book-detail-row d-none">
@@ -796,7 +808,7 @@ async function renderBookTable(cat, search, page) {
         <div class="table-responsive">
             <table class="table table-hover bg-white shadow-sm" id="bookTable" style="border-radius: 15px; overflow: hidden;">
                 <thead class="table-dark">
-                    <tr><th><i class="bi bi-book"></i></th><th>Book Name</th><th class="text-center">Reservation</th><th class="text-center"><i class="bi bi-info-circle"></i></th></tr>
+                    <tr><th><i class="bi bi-book"></i></th><th>Book Name</th><th class="text-center">Reservation</th><th class="text-center">Details</th></tr>
                 </thead>
                 <tbody>${rowsHTML}${addRowHTML}</tbody>
             </table>
@@ -955,9 +967,11 @@ document.getElementById('btnConfirmDeleteOk').addEventListener('click', async fu
     if (pendingDeleteForm.type === 'category') {
         const fileName = imageFileMap[pendingDeleteForm.name.toLowerCase()];
         if (fileName) { await supabase.storage.from(STORAGE_BUCKET).remove([fileName]).catch(() => {}); }
+        showToastAfterRedirect('Category deleted successfully');
         window.location.href = 'Book.html';
     } else if (pendingDeleteForm.type === 'book') {
         await supabase.from('book').delete().eq('BookID', pendingDeleteForm.id);
+        showToastAfterRedirect('Book deleted successfully');
         const s = window.__bookPageState || getState();
         pushState(s.cat, s.search, s.page);
     }
@@ -989,7 +1003,10 @@ document.getElementById('addBookForm').addEventListener('submit', async function
 // --- ขยาย/ย่อ แถวรายละเอียดหนังสือ ---
 window.toggleDetailRow = function (btn) {
     const row = btn.closest('tr').nextElementSibling;
-    if (row && row.classList.contains('book-detail-row')) { row.classList.toggle('d-none'); }
+    if (row && row.classList.contains('book-detail-row')) {
+        row.classList.toggle('d-none');
+        btn.classList.toggle('open');   // flips the arrow
+    }
 };
 
 // --- เปิด/ปิด โหมดเเก้ไขทีละฟิลด์ (ปากกา <-> save) ---
@@ -1002,32 +1019,14 @@ window.toggleFieldEdit = function (btn, bookId, fieldName) {
         display.classList.add('d-none');
         input.classList.remove('d-none');
         input.focus();
-        // ไอคอน "บันทึก" เปลี่ยนจากเครื่องหมายถูกเป็นรูปดิสก์เก็ต ให้สื่อความหมาย "save" ชัดเจนขึ้น
-        icon.className = 'bi bi-floppy2-fill';
+        // ไอคอน "บันทึก" = เครื่องหมายถูกสีเขียว ขนาดใหญ่ขึ้นให้เห็นชัด
+        icon.className = 'bi bi-check-circle-fill';
         icon.style.color = '#3B6540';
+        icon.style.fontSize = '1.6rem';
     } else {
         saveBookField(bookId, fieldName, input.value.trim());
     }
 };
-
-// --- แจ้งเตือนเล็กๆ ตอนบันทึกสำเร็จ ---
-function showSaveToast(message) {
-    const toast = document.getElementById('saveToast');
-    if (!toast) return;
-    toast.querySelector('span').textContent = message || 'บันทึกสำเร็จแล้ว!';
-    toast.classList.add('show');
-    clearTimeout(window.__saveToastTimer);
-    window.__saveToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
-}
-// saveBookField ด้านล่างนี้จะ reload หน้าทันทีหลังบันทึก (ผ่าน pushState)
-// เราจึงเก็บข้อความไว้ใน sessionStorage ก่อน reload แล้วค่อยเอามาโชว์หลังโหลดหน้าเสร็จ
-window.addEventListener('DOMContentLoaded', function () {
-    const msg = sessionStorage.getItem('bookSaveToast');
-    if (msg) {
-        sessionStorage.removeItem('bookSaveToast');
-        showSaveToast(msg);
-    }
-});
 
 async function saveBookField(bookId, fieldName, value) {
     if (fieldName === 'PublishYear' && !/^\d{4}$/.test(value)) {
@@ -1036,7 +1035,7 @@ async function saveBookField(bookId, fieldName, value) {
     }
     const { error } = await supabase.from('book').update({ [fieldName]: value }).eq('BookID', bookId);
     if (error) { showPopupAlert('Update failed: ' + error.message); return; }
-    sessionStorage.setItem('bookSaveToast', 'บันทึกสำเร็จแล้ว!');
+    showToastAfterRedirect('บันทึกสำเร็จแล้ว!');
     const s = window.__bookPageState || getState();
     pushState(s.cat, s.search, s.page);
 }
@@ -1114,10 +1113,5 @@ window.addEventListener('scroll', function () {
 render();
 </script>
 
-<!-- "Saved!" toast shown after editing a book field (see showSaveToast() above) -->
-<div id="saveToast" class="save-toast">
-    <i class="bi bi-check-circle-fill"></i>
-    <span>บันทึกสำเร็จแล้ว!</span>
-</div>
 </body>
 </html>

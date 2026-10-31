@@ -107,6 +107,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Shared decoration styles (same colors, nicer look) -->
     <link rel="stylesheet" href="decor.css">
+    <script src="toast.js"></script>
+    <script src="booked-details.js"></script>
 </head>
 
 <body>
@@ -200,6 +202,15 @@
 </div>
 <script>
 function showPopupAlert(message, redirect, color) {
+    // Success (green) messages now show as a toast at the bottom of the screen
+    // instead of a pop-up window. Errors (red) still use the pop-up below.
+    if (color) {
+        if (redirect === 'back') { showToastAfterRedirect(message); window.history.back(); }
+        else if (redirect === 'reload') { showToastAfterRedirect(message); window.location.reload(); }
+        else if (redirect) { showToastAfterRedirect(message); window.location.href = redirect; }
+        else { showToast(message); }
+        return;
+    }
     var msgEl = document.getElementById('popupAlertMessage');
     if (msgEl) { msgEl.textContent = message; msgEl.style.color = color || ''; }
     var success = !!color;
@@ -399,12 +410,12 @@ function showPopupAlert(message, redirect, color) {
             <div class="row">
                 <div class="col-6">
                     <label class="small fw-bold">Start Time (08:00-20:00)</label>
-                    <input type="time" id="RoomStartTime" class="form-control" min="08:00" max="19:59" required onchange="calcRoomEndTime()" style="border-radius: 12px;">
+                    <select id="RoomStartTime" class="form-select" required onchange="calcRoomEndTime()" style="border-radius: 12px;"><option value="">เลือกเวลา</option><option value="08:00">08:00 น.</option><option value="09:00">09:00 น.</option><option value="10:00">10:00 น.</option><option value="11:00">11:00 น.</option><option value="12:00">12:00 น.</option><option value="13:00">13:00 น.</option><option value="14:00">14:00 น.</option><option value="15:00">15:00 น.</option><option value="16:00">16:00 น.</option><option value="17:00">17:00 น.</option><option value="18:00">18:00 น.</option><option value="19:00">19:00 น.</option></select>
                     <div id="RoomStartTimeError" class="small text-danger mt-1 d-none"></div>
                 </div>
                 <div class="col-6">
                     <label class="small fw-bold">End Time (3 hours limit)</label>
-                    <input type="time" id="RoomEndTime" class="form-control" readonly style="border-radius: 12px; background-color: #f8f9fa;">
+                    <div class="input-group"><input type="text" id="RoomEndTime" class="form-control" readonly placeholder="--:--" style="border-radius: 12px 0 0 12px; background-color: #f8f9fa;"><span class="input-group-text" style="border-radius: 0 12px 12px 0;">น.</span></div>
                 </div>
             </div>
 
@@ -600,6 +611,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_mko6yzEssPr356mYIbkL4A_GWFX6R6C';
 const STORAGE_BUCKET = 'room-images'; // ต้องสร้าง public bucket ชื่อนี้ใน Supabase Storage ก่อน (แยกจาก boardgame-images)
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.__sb = supabase; // booked-details.js uses this same client
 
 // ---------- ตัวช่วย validate ฟอร์มจอง (UX: error ทันที, MemberID ตัวเลข 9 หลัก, เวลาต้องอยู่ในช่วงเปิดบริการ) ----------
 function bindBookingValidation({ memberInputId, memberErrId, timeInputId, timeErrId, timeMin, timeMax, checkboxId, confirmBtnId }) {
@@ -736,7 +748,7 @@ function renderGrid(busyIds) {
                 <div class="room-name">${r.Name}</div>
                 <div class="room-info">Capacity : ${r.Capacity} person</div>
                 ${isBusy
-                    ? `<button class="btn-action btn-busy" disabled>Booked</button>`
+                    ? `<button class="btn-action btn-busy" style="cursor: pointer;" onclick="openBookedDetails('room', '${rid}', '${nameEsc}')"><i class="bi bi-info-circle me-1"></i>Booked</button>`
                     : `<button class="btn-action btn-reserve" onclick="openBookingModal('${rid}', '${nameEsc}')">Reserve</button>`
                 }
             </div>
@@ -821,6 +833,7 @@ document.getElementById('addRoomForm').addEventListener('submit', async function
     const { error } = await supabase.from('room').insert({ RoomID: RID, Name, Capacity, RoomType });
     if (error) { showPopupAlert('Add failed: ' + error.message); return; }
 
+    showToastAfterRedirect('Room added successfully');
     window.location.reload();
 });
 

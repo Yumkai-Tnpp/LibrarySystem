@@ -212,3 +212,50 @@ body {
         transition-duration: 0.001ms !important;
     }
 }
+
+/* =========================================================
+   Booked-item details pop-up (used by booked-details.js)
+   Clean "label : value" rows, so it never looks cluttered.
+   Only the existing brand colors are used.
+   ========================================================= */
+.bd-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.bd-icon {
+    width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.6rem;
+}
+.bd-title { font-size: 1.2rem; font-weight: 700; color: var(--c-primary); }
+
+/* The list of rows (name, member id, dates...) inside one rounded box */
+.bd-list { border: 2px solid rgba(43, 83, 132, 0.12); border-radius: 14px; overflow: hidden; }
+.bd-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 16px; }
+.bd-row + .bd-row { border-top: 1px solid rgba(43, 83, 132, 0.10); }
+.bd-label { color: #6c757d; font-weight: 500; }
+.bd-value { font-weight: 600; text-align: right; }
+
+/* "Overdue" notice */
+.bd-overdue {
+    margin-top: 12px; padding: 8px 14px; border-radius: 10px;
+    color: var(--c-warning); background: rgba(171, 28, 28, 0.08); font-weight: 600;
+}
+
+/* Extend / Return buttons */
+.bd-actions { justify-content: center; gap: 16px; }
+.bd-btn { color: #fff !important; border-radius: 50px; padding: 10px 28px; font-weight: 600; border: none; }
+.bd-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.bd-btn-extend { background: var(--c-button1); }
+.bd-btn-return { background: var(--c-warning); }
+
+/* =========================================================
+   Book list: "Details" button that opens the book's details row
+   (text + arrow, so it is clear what it does)
+   ========================================================= */
+.btn-detail-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; color: var(--c-button1);
+    border: 2px solid var(--c-button1); border-radius: 50px;
+    padding: 4px 14px; font-size: 0.9rem; font-weight: 600;
+}
+.btn-detail-toggle:hover { background: var(--c-button1); color: #fff; }
+.btn-detail-toggle .bi-chevron-down { transition: transform 0.25s ease; }
+.btn-detail-toggle.open .bi-chevron-down { transform: rotate(180deg); }  /* arrow flips when open */
