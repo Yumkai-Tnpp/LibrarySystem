@@ -48,12 +48,17 @@
     function fromMinutes(m) {
         return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
     }
-    // Try common column names to find the member's name (shows nothing if there is none)
+    // Find the member's name. First try the usual column names, then any column
+    // with "name" or "ชื่อ" in it (for example FirstName + LastName joined together).
     function memberName(m) {
         if (!m) return '';
-        var full = m.Name || m.MemberName || m.FullName || m.name || '';
-        if (!full && (m.FirstName || m.LastName)) full = ((m.FirstName || '') + ' ' + (m.LastName || '')).trim();
-        return full;
+        var exact = m.Name || m.MemberName || m.FullName || m.name || '';
+        if (exact) return exact;
+        var parts = Object.keys(m)
+            .filter(function (k) { return k !== 'MemberID' && /name|ชื่อ|นามสกุล/i.test(k) && m[k]; })
+            .map(function (k) { return m[k]; });
+        if (parts.length === 0) console.warn('booked-details.js: no name column found. Member columns are:', Object.keys(m));
+        return parts.join(' ');
     }
     function showError(message) {
         if (window.showPopupAlert) showPopupAlert(message); else alert(message);
@@ -183,7 +188,7 @@
         document.getElementById('bdItemName').textContent = itemName;
 
         var html = '';
-        if (name) html += row('Name', name);
+        html += row('Name', name || '-');
         html += row('Member ID', booking.MemberID);
         if (cfg.hasTime) {
             html += row('Date', booking.BookingDate);

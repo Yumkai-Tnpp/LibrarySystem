@@ -243,8 +243,11 @@ body {
 .bd-actions { justify-content: center; gap: 16px; }
 .bd-btn { color: #fff !important; border-radius: 50px; padding: 10px 28px; font-weight: 600; border: none; }
 .bd-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.bd-btn-extend { background: var(--c-button1); }
-.bd-btn-return { background: var(--c-warning); }
+/* Bootstrap makes a plain .btn see-through on hover, so we lock the colour
+   for every state (normal, hover, focus, pressed) with !important */
+.bd-btn-extend, .bd-btn-extend:hover, .bd-btn-extend:focus, .bd-btn-extend:active { background: var(--c-button1) !important; }
+.bd-btn-return, .bd-btn-return:hover, .bd-btn-return:focus, .bd-btn-return:active { background: var(--c-warning) !important; }
+.bd-btn:hover:not(:disabled) { filter: brightness(0.92); }   /* slightly darker on hover */
 
 /* =========================================================
    Book list: "Details" button that opens the book's details row

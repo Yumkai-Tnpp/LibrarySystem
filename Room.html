@@ -108,6 +108,7 @@
     <!-- Shared decoration styles (same colors, nicer look) -->
     <link rel="stylesheet" href="decor.css">
     <script src="toast.js"></script>
+    <script src="time-options.js"></script>
     <script src="booked-details.js"></script>
 </head>
 
@@ -415,7 +416,7 @@ function showPopupAlert(message, redirect, color) {
                 </div>
                 <div class="col-6">
                     <label class="small fw-bold">End Time (3 hours limit)</label>
-                    <div class="input-group"><input type="text" id="RoomEndTime" class="form-control" readonly placeholder="--:--" style="border-radius: 12px 0 0 12px; background-color: #f8f9fa;"><span class="input-group-text" style="border-radius: 0 12px 12px 0;">น.</span></div>
+                    <select id="RoomEndTime" class="form-select" style="border-radius: 12px;"><option value="">เลือกเวลาเริ่มก่อน</option></select>
                 </div>
             </div>
 
@@ -902,7 +903,7 @@ window.openBookingModal = function (id, name) {
     document.getElementById('bookRName').innerHTML = "Choose : " + name;
     document.getElementById('bookMemberID').value = '';
     document.getElementById('RoomStartTime').value = '';
-    document.getElementById('RoomEndTime').value = '';
+    fillEndTimeOptions('RoomStartTime', 'RoomEndTime', 3);   // reset End Time list
     document.getElementById('acceptTerms').checked = false;
     resetRoomBookingValidation();
     new bootstrap.Modal(document.getElementById('bookingModal')).show();
@@ -949,13 +950,8 @@ window.toggleNewType = function () {
 };
 
 window.calcRoomEndTime = function () {
-    const start = document.getElementById('RoomStartTime').value;
-    if (start) {
-        let [h, m] = start.split(':').map(Number);
-        let eh = h + 3;
-        if (eh > 20 || (eh === 20 && m > 0)) { eh = 20; m = 0; } // ห้องสมุดปิด 20.00 น.
-        document.getElementById('RoomEndTime').value = String(eh).padStart(2, '0') + ':' + String(m).padStart(2, '0');
-    }
+    // Fill the End Time dropdown: 1 hour after start, up to 3 hours, never after 20:00
+    fillEndTimeOptions('RoomStartTime', 'RoomEndTime', 3);
 };
 
 loadRooms();
