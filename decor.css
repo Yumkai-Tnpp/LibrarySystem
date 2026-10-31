@@ -1,0 +1,214 @@
+/* =========================================================
+   decor.css
+   ---------------------------------------------------------
+   Shared "look & feel" file for every page of the site.
+   This file does NOT introduce any new brand colors.
+   It only reuses the colors already in the project:
+     - Primary (navy blue)   #2B5384
+     - Secondary (light bg)  #F0F7FF
+     - Success (green)       #3B6540
+     - Warning (red)         #AB1C1C
+     - Button1 (blue)        #1257A5
+     - Button2 (yellow)      #F4BC13
+   Everything below is only DECORATION: borders, shadows,
+   spacing, animation. No colors were invented.
+   ========================================================= */
+
+/* ---- 1. Brand colors as CSS variables, so the rest of this
+          file (and any future page) can reuse them easily ---- */
+:root {
+    --c-primary: #2B5384;
+    --c-secondary: #F0F7FF;
+    --c-success: #3B6540;
+    --c-warning: #AB1C1C;
+    --c-button1: #1257A5;
+    --c-button2: #F4BC13;
+}
+
+/* ---- 2. Display font for English brand/title text only ----
+   CkPaperDemo.ttf is already in the project folder but was
+   never used. It only has Latin letters, so we use it ONLY
+   for short English titles (like "Learning Commons" or
+   "STATUS") and never for Thai text, so nothing breaks. */
+@font-face {
+    font-family: 'CkPaperDemo';
+    src: url('CkPaperDemo.ttf') format('truetype');
+    font-display: swap;
+}
+.display-heading {
+    font-family: 'CkPaperDemo', 'Prompt', sans-serif !important;
+    letter-spacing: 0.5px;
+}
+
+/* ---- 3. Soft "graph paper" background texture ----
+   A very faint grid using the primary color at low opacity,
+   drawn on top of the existing light-blue background. This
+   is what gives the "poster / sticker" feeling in the
+   reference image, without changing the background color. */
+body {
+    background-color: var(--c-secondary) !important;
+    background-image:
+        linear-gradient(rgba(43, 83, 132, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(43, 83, 132, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+/* ---- 4. Cards: bolder outline + "sticker" offset shadow ----
+   Instead of a soft blurry shadow, cards now get a crisp,
+   offset shadow in the brand color. Cards also lift slightly
+   on hover, like a sticker being peeled up. */
+.card {
+    border: 2px solid rgba(43, 83, 132, 0.15) !important;
+    border-radius: 18px !important;
+    box-shadow: 5px 5px 0px rgba(43, 83, 132, 0.10) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 0px rgba(43, 83, 132, 0.16) !important;
+}
+
+/* ---- 5. Buttons: a little "press" feeling ----
+   Buttons lift on hover and visibly press down on click,
+   which makes the site feel more interactive/alive. */
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+.btn:hover {
+    transform: translateY(-2px);
+}
+.btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* ---- 6. Modals: pop in instead of just appearing ---- */
+.modal-content {
+    border-radius: 20px !important;
+    border: 2px solid rgba(43, 83, 132, 0.12) !important;
+}
+.modal.show .modal-dialog {
+    animation: popIn 0.25s ease;
+}
+
+/* ---- 7. Form fields: a clear brand-colored focus glow ---- */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--c-button1) !important;
+    box-shadow: 0 0 0 3px rgba(18, 87, 165, 0.18) !important;
+}
+
+/* ---- 8. Badges & dropdowns: match the rounder, bolder style ---- */
+.badge {
+    border-radius: 50px !important;
+}
+.dropdown-menu {
+    border-radius: 16px !important;
+    border: 2px solid rgba(43, 83, 132, 0.10) !important;
+}
+
+/* ---- 9. Accordion (FAQ, etc.): rounder + brand focus color ---- */
+.accordion-item {
+    border-radius: 14px !important;
+    overflow: hidden;
+    border: 2px solid rgba(43, 83, 132, 0.12) !important;
+    margin-bottom: 10px;
+}
+.accordion-button:focus {
+    box-shadow: 0 0 0 3px rgba(18, 87, 165, 0.18) !important;
+}
+.accordion-button:not(.collapsed) {
+    color: var(--c-primary) !important;
+    background-color: rgba(43, 83, 132, 0.06) !important;
+}
+
+/* ---- 10. Entrance animations ----
+   Cards fade/slide in one after another (staggered) the
+   first time a page loads, and the navbar gently drops in. */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.main-header {
+    animation: slideDown 0.4s ease;
+}
+
+/* Stagger up to the first 10 cards in any row/grid.
+   Cards after that just fade in together (no extra delay). */
+.row > div > .card,
+.row > .card {
+    animation: fadeInUp 0.45s ease both;
+}
+.row > div:nth-child(1) > .card,  .row > .card:nth-child(1)  { animation-delay: 0.03s; }
+.row > div:nth-child(2) > .card,  .row > .card:nth-child(2)  { animation-delay: 0.06s; }
+.row > div:nth-child(3) > .card,  .row > .card:nth-child(3)  { animation-delay: 0.09s; }
+.row > div:nth-child(4) > .card,  .row > .card:nth-child(4)  { animation-delay: 0.12s; }
+.row > div:nth-child(5) > .card,  .row > .card:nth-child(5)  { animation-delay: 0.15s; }
+.row > div:nth-child(6) > .card,  .row > .card:nth-child(6)  { animation-delay: 0.18s; }
+.row > div:nth-child(7) > .card,  .row > .card:nth-child(7)  { animation-delay: 0.21s; }
+.row > div:nth-child(8) > .card,  .row > .card:nth-child(8)  { animation-delay: 0.24s; }
+.row > div:nth-child(9) > .card,  .row > .card:nth-child(9)  { animation-delay: 0.27s; }
+.row > div:nth-child(10) > .card, .row > .card:nth-child(10) { animation-delay: 0.30s; }
+
+/* ---- 11. Small decorative accent dot ----
+   A tiny round dot in the brand yellow that can be added
+   next to a section title for a playful touch, e.g.:
+   <h2>My Title <span class="decor-dot"></span></h2> */
+.decor-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--c-button2);
+    margin-left: 6px;
+    animation: floatDot 2.4s ease-in-out infinite;
+}
+@keyframes floatDot {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+}
+
+/* ---- 12. "Saved!" toast ----
+   A small pill that slides up from the bottom of the screen,
+   stays for a moment, then fades out. Used after saving an
+   edited field (see showSaveToast() in Book.html). */
+.save-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--c-success);
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 4px 4px 0px rgba(43, 83, 132, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.save-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ---- 13. Respect users who prefer less motion ---- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}

@@ -13,10 +13,7 @@
             font-family: 'PromptRegular';
             src: url('PromptRegular.ttf') format('truetype');
         }
-        * {
-            font-family: 'PromptRegular' !important;
-            font-weight: bold !important;
-        }
+        * { font-family: 'Prompt', 'PromptRegular', sans-serif !important; }
         body { background-color: #f0f7ff !important; }
 
         .main-header { background: #2b5484; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
@@ -44,6 +41,12 @@
         .dropdown-item.active { font-weight: bold; }
         .text-danger:hover { background-color: #fff1f0 !important; }
     </style>
+    <!-- Google Fonts: real "Prompt" weights, so headings/body can differ in weight -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Shared decoration styles (same colors, nicer look) -->
+    <link rel="stylesheet" href="decor.css">
 </head>
 
 <body>
@@ -51,7 +54,7 @@
 <header class="main-header sticky-top">
     <div class="header-top d-none d-lg-flex">
         <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
-        <h1 class="learning-title">Learning Commons</h1>
+        <h1 class="learning-title display-heading">Learning Commons</h1>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
@@ -999,11 +1002,32 @@ window.toggleFieldEdit = function (btn, bookId, fieldName) {
         display.classList.add('d-none');
         input.classList.remove('d-none');
         input.focus();
-        icon.className = 'bi bi-check-circle-fill text-success';
+        // ไอคอน "บันทึก" เปลี่ยนจากเครื่องหมายถูกเป็นรูปดิสก์เก็ต ให้สื่อความหมาย "save" ชัดเจนขึ้น
+        icon.className = 'bi bi-floppy2-fill';
+        icon.style.color = '#3B6540';
     } else {
         saveBookField(bookId, fieldName, input.value.trim());
     }
 };
+
+// --- แจ้งเตือนเล็กๆ ตอนบันทึกสำเร็จ ---
+function showSaveToast(message) {
+    const toast = document.getElementById('saveToast');
+    if (!toast) return;
+    toast.querySelector('span').textContent = message || 'บันทึกสำเร็จแล้ว!';
+    toast.classList.add('show');
+    clearTimeout(window.__saveToastTimer);
+    window.__saveToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+// saveBookField ด้านล่างนี้จะ reload หน้าทันทีหลังบันทึก (ผ่าน pushState)
+// เราจึงเก็บข้อความไว้ใน sessionStorage ก่อน reload แล้วค่อยเอามาโชว์หลังโหลดหน้าเสร็จ
+window.addEventListener('DOMContentLoaded', function () {
+    const msg = sessionStorage.getItem('bookSaveToast');
+    if (msg) {
+        sessionStorage.removeItem('bookSaveToast');
+        showSaveToast(msg);
+    }
+});
 
 async function saveBookField(bookId, fieldName, value) {
     if (fieldName === 'PublishYear' && !/^\d{4}$/.test(value)) {
@@ -1012,6 +1036,7 @@ async function saveBookField(bookId, fieldName, value) {
     }
     const { error } = await supabase.from('book').update({ [fieldName]: value }).eq('BookID', bookId);
     if (error) { showPopupAlert('Update failed: ' + error.message); return; }
+    sessionStorage.setItem('bookSaveToast', 'บันทึกสำเร็จแล้ว!');
     const s = window.__bookPageState || getState();
     pushState(s.cat, s.search, s.page);
 }
@@ -1088,5 +1113,11 @@ window.addEventListener('scroll', function () {
 
 render();
 </script>
+
+<!-- "Saved!" toast shown after editing a book field (see showSaveToast() above) -->
+<div id="saveToast" class="save-toast">
+    <i class="bi bi-check-circle-fill"></i>
+    <span>บันทึกสำเร็จแล้ว!</span>
+</div>
 </body>
 </html>

@@ -10,7 +10,7 @@
 
     <style>
         @font-face { font-family: 'PromptRegular'; src: url('PromptRegular.ttf') format('truetype'); }
-        * { font-family: 'PromptRegular' !important; font-weight: bold !important; }
+        * { font-family: 'Prompt', 'PromptRegular', sans-serif !important; }
         body { background-color: #f0f7ff !important; }
 
         .main-header { background: #2b5484; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
@@ -38,6 +38,12 @@
         .dropdown-item.active { font-weight: bold; }
         .text-danger:hover { background-color: #fff1f0 !important; }
     </style>
+    <!-- Google Fonts: real "Prompt" weights, so headings/body can differ in weight -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Shared decoration styles (same colors, nicer look) -->
+    <link rel="stylesheet" href="decor.css">
 </head>
 
 <body>
@@ -45,7 +51,7 @@
 <header class="main-header sticky-top">
     <div class="header-top d-none d-lg-flex">
         <img src="Pic-Decorate/logo.png" alt="Logo" class="nav-logo-large" onerror="this.style.display='none'">
-        <h1 class="learning-title">Learning Commons</h1>
+        <h1 class="learning-title display-heading">Learning Commons</h1>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
@@ -182,7 +188,7 @@ function showPopupAlert(message, redirect, color) {
 <div class="container mt-4">
     <div class="search-container mb-4">
         <form id="searchForm" class="row align-items-center g-2">
-            <div class="col-md-2"><h3 class="m-0 status-title fw-bold">STATUS</h3></div>
+            <div class="col-md-2"><h3 class="m-0 status-title fw-bold display-heading">STATUS</h3></div>
             <div class="col-md-10 d-flex gap-2 flex-wrap justify-content-end">
                 <div class="status-input-wrap">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search Book, Boardgame, Room">
